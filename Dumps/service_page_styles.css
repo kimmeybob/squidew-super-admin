@@ -1,0 +1,137 @@
+
+/*
+Media queries
+*/
+
+/* On screens that are 992px wide or less, go from four columns to two columns */
+@media screen and (max-width: 992px) {
+ html{background-color: white;}
+}
+/* On screens that are 600px wide or less, make the columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+ html{background-color: white;}
+}
+
+html {
+	background-color: white;
+	color:  black;
+	width: 98%;
+	height: 98%; 
+	margin: 0;
+	padding:  1%;
+	display: flex;
+	flex-direction: column;
+}
+
+body {
+	margin: auto;
+	font-family: 'Roboto', sans-serif;
+	background-color: white;
+	width: 98%;
+	height: 100%;
+	margin: 0;
+	padding:  1%;
+
+}
+
+.main_container {
+	width: 100%;
+	height: 100%;
+	background-color: white;
+	display: flex;
+	flex-direction: column;
+
+}
+
+.title_text1 {
+	font-size: 1.5em;
+	width: auto;
+}
+
+.sub_text1 {
+	font-size: 1em;
+	width: auto;
+}
+
+.title_header_container{
+	margin: auto;
+	padding-top: 10%;
+	padding-right: 5%;
+	padding-left: 5%;
+	width: 90%;
+	background-color:  white;
+
+}
+
+.components_content_container{
+	margin: auto;
+	padding-top: 15%;
+	padding-right: 5%;
+	padding-left: 5%;
+	background-color: white;
+	flex: 0 0 80%;
+	width: 90%;
+
+}
+
+.footer_container {
+	margin: auto;
+	padding-top: 5%;
+	padding-right: 5%;
+	padding-left: 5%;
+	width: 90%;
+	background-color:  white;
+
+}
+
+colored {
+	color:  #0AABF7;
+}
+
+unbolded {
+	font-weight: normal;
+}
+
+.service_items_left {
+	height: 80%;
+	width: 80%;
+	padding: 5%;
+	background-color: #0AABF7;
+	margin-right: 2.5%;
+	border-radius: 10%;
+	
+
+}
+
+.service_items_right {
+	height: 80%;
+	width: 80%;
+	padding: 5%;
+	background-color: #0AABF7;
+	margin-left: 2.5%;
+	border-radius: 10%;
+}
+
+.row_selection_container_main {
+	background-color: white;
+	width: 100%;
+	height:25%;
+}
+
+.row_selection_container_inner {
+	background-color: white;
+	width: 100%;
+	height:100%;
+	display: flex;
+	flex-direction: row;
+}
+
+.service_text_1 {
+	color: white;
+	font-size: 1.2em;
+}
+
+.service_text_2 {
+	color: white;
+	font-size: 0.9em;
+}

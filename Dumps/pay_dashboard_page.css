@@ -1,0 +1,93 @@
+/*
+Media queries
+*/
+
+/* On screens that are 992px wide or less, go from four columns to two columns */
+@media screen and (max-width: 992px) {
+ html{background-color: white;}
+}
+/* On screens that are 600px wide or less, make the columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+ html{background-color: white;}
+}
+
+html {
+	background-color: white;
+	color:  black;
+	width: 98%;
+	height: 98%; 
+	margin: 0;
+	padding:  1%;
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 15%;
+}
+
+body {
+	margin: auto;
+	font-family: 'Roboto', sans-serif;
+	background-color: white;
+	width: 98%;
+	height: 100%;
+	margin: 0;
+	padding:  1%;
+
+}
+
+.main_container {
+	width: 100%;
+	height: 100%;
+	background-color: white;
+	display: flex;
+	flex-direction: column;
+
+}
+
+.title_text1 {
+	font-size: 1.5em;
+	width: auto;
+}
+
+.title_header_container{
+	margin: auto;
+	padding-top: 10%;
+	padding-right: 5%;
+	padding-left: 5%;
+	width: 90%;
+	background-color:  white;
+
+}
+
+.components_content_container{
+	margin: auto;
+	padding-top: 5%;
+	padding-right: 5%;
+	padding-left: 5%;
+	background-color: white;
+	flex: 0 0 80%;
+	width: 90%;
+}
+
+.footer_container {
+	margin: auto;
+	padding-top: 5%;
+	padding-right: 5%;
+	padding-left: 5%;
+	width: 90%;
+	background-color:  white;
+
+}
+
+.bottom_nav_sticky{
+	height: 5%;
+	position: fixed;
+	bottom: 0;
+	padding-top: 2.5%;
+	padding-bottom: 2.5%;
+	padding-right: 5%;
+	padding-left: 5%;
+	width: 90%;
+	left: 0;
+	background-color:  #C4C4C4;
+	overflow: hidden;
+}

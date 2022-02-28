@@ -1,0 +1,87 @@
+/*
+Media queries
+*/
+
+/* On screens that are 992px wide or less, go from four columns to two columns */
+@media screen and (max-width: 992px) {
+ html{background-color: white;}
+}
+/* On screens that are 600px wide or less, make the columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+ html{background-color: white;}
+}
+
+html {
+	background-color: black;
+	color:  white;
+}
+
+html,body {
+	width: 98%;
+	height: 98%;
+	margin: 0;
+	padding:  1%;
+}
+
+body {
+	font-family: 'Roboto', sans-serif;
+	background-color: black;
+}
+
+.main_container {
+	width: 90%;
+	height: auto;
+	padding-right: 5%;
+	padding-left: 5%;
+
+}
+
+.title_header_container{
+	margin-top: 10%;
+	width: 100%;
+
+}
+
+.title_text1 {
+	font-size: 1.5em;
+		width: auto;
+
+}
+
+.title_text2 {
+	font-size: 1.5em;
+		width: auto;
+		
+}
+
+.title_text3{
+	font-size: 1em;
+		width: auto;
+}
+
+.sub_text1{
+	font-size: 1.1em;
+}
+
+.sub_text2{
+	font-size: 1em;
+}
+
+
+.banner_image{
+
+	background-color:  red;
+
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.footer_container{
+
+	width: 98%;
+	position: absolute;
+	bottom: 0;
+	padding-bottom:  5%;
+	text-align: center;
+}
+		

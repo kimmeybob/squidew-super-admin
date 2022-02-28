@@ -1,0 +1,54 @@
+html {
+  margin: 0;
+  /* width: 100%;
+  height: 100%; */
+  overflow: hidden;
+  padding: 0;
+  background-color: white;
+  font-family: roboto;
+}
+body {
+  margin: 0;
+}
+
+@fonts-face {
+  /* Hiruko Pro Black (Bold) */
+  font-family: "Hiruko Pro Black";
+  src: url(Assets/Fonts/hiruko_pro_black.otf) format("opentype");
+
+  /* Hiruko Pro Regular (Reg) */
+  font-family: "Hiruko Pro Regular";
+  src: url(Assets/Fonts/hiruko_pro_regular.otf) format("opentype");
+
+  /* Roboto Thin (thin) */
+  font-family: "Roboto Thin";
+  src: url(Assets/Fonts/Roboto-Thin.ttf) format("truetype");
+
+  /* Roboto Light (light) */
+  font-family: "Roboto Light";
+  src: url(Assets/Fonts/Roboto-Light.ttf) format("truetype");
+
+  /* Roboto Default (Reg) */
+  font-family: "Roboto";
+  src: url(Assets/Fonts/Roboto-Regular.ttf) format("truetype");
+
+  /* Roboto Medium (Mid) */
+  font-family: "Roboto Medium";
+  src: url(Assets/Fonts/Roboto-Medium.ttf) format("truetype");
+
+  /* Roboto Bold (Bold) */
+  font-family: "Roboto Bold";
+  src: url(Assets/Fonts/Roboto-Bold.ttf) format("truetype");
+
+  /* Roboto Black (Black) */
+  font-family: "Roboto Black";
+  src: url(Assets/Fonts/Roboto-Black.ttf) format("truetype");
+}
+.brand {
+  font-family: Hiruko Pro Black;
+  margin-left: 1%;
+}
+.product_label {
+  font-family: Roboto Thin;
+  margin-left: 1%;
+}

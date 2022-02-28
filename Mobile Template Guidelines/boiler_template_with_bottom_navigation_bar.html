@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>SQUDIEW Boiler Template - Layout Architecture</title>
+
+</head>
+<style>
+/*
+Media queries
+*/
+
+/* On screens that are 992px wide or less, go from four columns to two columns */
+@media screen and (max-width: 992px) {
+ html{background-color: white;}
+}
+/* On screens that are 600px wide or less, make the columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+ html{background-color: white;}
+}
+
+html {
+	background-color: #FFB800;
+	color:  white;
+	width: 98%;
+	height: 98%; 
+	margin: 0;
+	padding:  1%;
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 15%;
+}
+
+body {
+	margin: auto;
+	font-family: 'Roboto', sans-serif;
+	background-color: red;
+	width: 98%;
+	height: 100%;
+	margin: 0;
+	padding:  1%;
+
+}
+
+.main_container {
+	width: 100%;
+	height: 100%;
+	background-color: green;
+	display: flex;
+	flex-direction: column;
+
+}
+
+.title_text1 {
+	font-size: 1.5em;
+	width: auto;
+}
+
+.title_header_container{
+	margin: auto;
+	padding-top: 10%;
+	padding-right: 5%;
+	padding-left: 5%;
+	width: 90%;
+	background-color:  #13223D;
+
+}
+
+.components_content_container{
+	margin: auto;
+	padding-top: 5%;
+	padding-right: 5%;
+	padding-left: 5%;
+	background-color: blue;
+	flex: 0 0 80%;
+	width: 90%;
+}
+
+.footer_container {
+	margin: auto;
+	padding-top: 5%;
+	padding-right: 5%;
+	padding-left: 5%;
+	width: 90%;
+	background-color:  darkgreen;
+
+}
+
+.bottom_nav_sticky{
+	height: 5%;
+	position: fixed;
+	bottom: 0;
+	padding-top: 5%;
+	padding-right: 5%;
+	padding-left: 5%;
+	width: 90%;
+	left: 0;
+	background-color:  violet;
+	overflow: hidden;
+}
+
+</style>
+<body>
+
+	<div class="main_container">
+
+		<!-- Header or Title Components Holder -->
+		<div class="title_header_container">
+			<b><text class="title_text1">Title or heading here Title</text></b><br>			
+		</div>
+
+		<!-- Add Components or Elements for each module here. -->
+		<div class="components_content_container">
+			<b><text class="title_text1">Main Content Here</text></b><br>			
+		</div>
+
+		<div class="footer_container">
+			<b><text class="title_text1">Footer Here</text></b><br>			
+		</div>
+
+	</div>
+
+	<div class="bottom_nav_sticky">
+			<b><text class="title_text1">Bottom Navigation Bar Here</text></b><br>			
+	</div>
+
+
+</body>
+</html>
