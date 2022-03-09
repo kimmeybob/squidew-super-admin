@@ -40,20 +40,85 @@ require 'Assets/Fonts/Robot_Regular_Web_Import.php';
 
 
 <!-- Nav Links -->
+<script>
+if (localStorage.getItem("admin_id") === null) {
+    console.log("Unknown User logged out.");
+    localStorage.clear();
+    window.location.href = "index.php";
+} else {
+
+}
+</script>
 <div class="sidenav" style="background: white;">
 
     <div class="profile_container" style="display: flex;flex-wrap: wrap;flex: 30%;background: white;">
 
         <div style="flex: 0 auto;text-align: center;">
-            <img src="././Assets/Images/login_branding_image.svg" alt="Avatar"
-                style="width: 42px;height: 42px;background: #46A5DB;border-radius: 60px;margin: 0 15px 0 25px;">
+
+            <img id="super_admin_profile"
+                style="width: 42px;height: 42px;background: white;border-radius: 60px;margin: 0 15px 0 25px;">
+            <script>
+            var profile_image = localStorage.getItem("admin_profile_image");
+            document.getElementById("super_admin_profile").src = profile_image;
+            </script>
         </div>
         <div style="flex: 50%;display: flex;flex-wrap: wrap;text-align: left;">
             <p style="flex:100%;overflow: hidden;color: black;padding: 0;margin:0;font-size: 1.1rem;">
-                <b>Carlsan Kim</b>
+                <b id="admin_name">ADMIN_NAME</b>
+                <script>
+                var admin_fname = "UNATHORIZED";
+                var admin_lname = "USER";
+
+                //Checks if FirstName Exists in Local Storage
+                if (localStorage.getItem("admin_fname") === null) {
+                    //FirstName Local Storage Data Does not Exist
+                    admin_fname = "UNATHORIZED";
+                } else {
+                    console.log("Admin FName: " + localStorage.getItem("admin_fname"));
+                    admin_fname = localStorage.getItem("admin_fname");
+                    //Checks if LastName Exists in Local Storage
+                    if (localStorage.getItem("admin_lname") === null) {
+                        //Last Name Local Storage Data Does not Exist
+                        admin_lname = "USER";
+                    } else {
+                        console.log("Admin LName: " + localStorage.getItem("admin_lname"));
+                        admin_lname = localStorage.getItem("admin_lname");
+
+                        //Sets the Tag with the Admin Name
+                        document.getElementById("admin_name").innerHTML = admin_fname + " " + admin_lname;
+                    }
+                }
+                </script>
+
             </p>
-            <p style="flex: 100%;overflow: hidden;color: black;padding: 0;margin:0;font-size: 1rem;">
-                Admin</p>
+            <p id="admin_role" style="flex: 100%;overflow: hidden;color: black;padding: 0;margin:0;font-size: 1rem;">
+                Developer
+            </p>
+
+            <script>
+            var admin_status = "UNATHORIZED";
+            //Checks Account Status/Role Local Storage
+            if (localStorage.getItem("admin_status") === null) {
+                admin_status = "UNATHORIZED";
+            } else {
+                if (localStorage.getItem("admin_status") == "1") {
+                    admin_status = "Developer";
+
+                    //Sets the Tag with the Admin Name
+                    document.getElementById("admin_role").innerHTML = admin_status;
+                } else if (localStorage.getItem("admin_status") == "0") {
+                    admin_status = "Guest";
+
+                    //Sets the Tag with the Admin Name
+                    document.getElementById("admin_role").innerHTML = admin_status;
+                } else {
+                    //Add more rolse here.
+                }
+
+
+
+            }
+            </script>
         </div>
 
     </div>
@@ -69,7 +134,14 @@ require 'Assets/Fonts/Robot_Regular_Web_Import.php';
     <br>
     <br>
 
-    <a href="#signout">Sign Out</a>
+    <script>
+    function signOutUser() {
+        console.log("User logged out.");
+        localStorage.clear();
+        window.location.href = "index.php";
+    }
+    </script>
+    <a onclick="signOutUser()">Sign Out</a>
 
     <!-- <div style="background: white;bottom: 3%;text-align: left;width: 100%;margin: 20% 0;">
         <span style="padding: 0 8px 6px 30px;">Powered by </span>

@@ -107,11 +107,13 @@ require 'Database Settings/database_access_credentials.php';
                                 </button>
 
                                 <div class="dropdown-content">
-                                    <a style="color: grey;font-size: 0.8rem;">Options</a>
-                                    <a
+                                    <a style="color: grey;font-size: 0.8rem;pointer-events: none;">Options</a>
+                                    <a style="cursor: default;"
+                                        onclick="openEditModal('<?php echo $row['HEI_ID'];?>','<?php echo $row['HEI_Name'];?>','<?php echo $row['HEI_Type'];?>','<?php echo $row['Status'];?>','<?php echo $row['Start'];?>','<?php echo $row['End'];?>')">View</a>
+                                    <a style="cursor: default;"
                                         onclick="openEditModal('<?php echo $row['HEI_ID'];?>','<?php echo $row['HEI_Name'];?>','<?php echo $row['HEI_Type'];?>','<?php echo $row['Status'];?>','<?php echo $row['Start'];?>','<?php echo $row['End'];?>')">Edit</a>
                                     <a onclick="alert('Clicked remove record asdasd')"
-                                        style="color: #EF575C;">Remove</a>
+                                        style="color: #EF575C;cursor: default;">Remove</a>
                                 </div>
                             </div>
                         </td>

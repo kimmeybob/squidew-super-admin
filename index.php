@@ -44,17 +44,33 @@ $(document).ready(function() {
                     password: $("#password").val(),
                 },
                 success: function(result) {
-                    $("#result_display").html(result);
+                    if (result.toString() == "") {
+                        $("#result_display").html("Invalid credentials. Please try again.");
+                    } else {
+
+                        $("#result_display").html(result.toString());
+                    }
+
                 }
             });
         }
 
     });
 });
+
+function checkUserIsSignedIn() {
+    if (localStorage.getItem("admin_id") === null) {
+        //Do nothing since the user is not yet authenticated
+    } else {
+        window.location.href = "dashboard.php";
+    }
+}
 </script>
 
 <body>
-
+    <script>
+    checkUserIsSignedIn();
+    </script>
     <div class="main">
 
     </div>
