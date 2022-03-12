@@ -13,7 +13,7 @@ require 'Database Settings/database_access_credentials.php';
 
 ?>
 
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html>
 
 <head>
