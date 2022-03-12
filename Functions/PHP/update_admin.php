@@ -34,18 +34,18 @@ $admin_birthdate = $_POST['edit_admin_birthdate'];
 // $admin_birthdate = $_POST['edit_birthdate'];
 
 //Check if username is blank
-if(trim($_POST['edit_username']) == ""){
+if(trim($_POST['edit_admin_username']) == ""){
     //Field is Empty
 }else{
-    $admin_username = $_POST['edit_username'];
+    $admin_username = $_POST['edit_admin_username'];
     $include_username = true;
 }
 
 //Check if passwor is blank
-if(trim($_POST['edit_password']) == ""){
+if(trim($_POST['edit_admin_password']) == ""){
     //Field is Empty
 }else{
-    $admin_password = $_POST['edit_password'];
+    $admin_password = $_POST['edit_admin_password'];
     $include_password = true;
 }
 $admin_account_status = "1";

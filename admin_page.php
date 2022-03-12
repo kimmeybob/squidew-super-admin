@@ -75,7 +75,7 @@ require 'Database Settings/database_access_credentials.php';
                         <button
                             style="flex: auto;font-size:1rem;background: #3A72E8;border: none;padding: 3% 10% 3% 10%;border-radius: 50px;color: white;"
                             onclick="openModal();">
-                            Add User
+                            Add Admin
                         </button>
                     </div>
                 </div>
@@ -137,7 +137,7 @@ require 'Database Settings/database_access_credentials.php';
                                         style="color: #287BEE;cursor: default;">View</a>
                                     <a onclick="edit_admin_details('<?php echo $row['admin_admin_id'];?>','<?php echo $row['hei_name'];?>','<?php echo $row['admin_first_name'];?>','<?php echo $row['admin_middle_name'];?>','<?php echo $row['admin_last_name'];?>','<?php echo $row['admin_contact_number']?>','<?php echo $row['admin_email'];?>','<?php echo $row['admin_birthdate'];?>','<?php echo $admin_status;?>','<?php echo $row['admin_username'];?>','<?php echo $row['admin_password'];?>','<?php echo $row['admin_suffix']?>','<?php echo $row['admin_home_address']?>','<?php echo $row['admin_sex']?>','<?php echo $row['admin_profile_image']?>')"
                                         ; style="cursor: default;">Edit</a>
-                                    <a onclick="alert('Clicked remove record asdasd')"
+                                    <a onclick="setDeleteIDValue(<?php echo $row['admin_admin_id'];?>)"
                                         style="color: #EF575C;cursor: default;">Remove</a>
                                 </div>
                             </div>
@@ -148,12 +148,12 @@ require 'Database Settings/database_access_credentials.php';
                 ?>
                 </table>
                 <p style="display: none;padding: 0 0 0 1rem" id="table_empty_set_data_display"
-                    class="table_empty_set_data_display">We coudn't find any admin with that name.</p>
+                    class="table_empty_set_data_display">We coudn't find any results for your query.</p>
 
             </div>
             <!-- Side Navigation -->
 
-            <div class="query_sidenav" style="width: 280px;padding: 0px">
+            <div class="query_sidenav" style="width: 280px;padding: 0px;height: calc(100% - 5rem);">
 
                 <div style="margin: 48px 1.2rem 2% 1.2rem;font-size: 1.2rem;font-weight: bold;text-align: left;">
                     Search
@@ -169,8 +169,26 @@ require 'Database Settings/database_access_credentials.php';
                     style="margin: 1rem 1.2rem 0 1.2rem;font-size: 1rem;font-weight: normal;text-align: left;color: #434343">
                     <p id="results_output" class="results_output"><?php echo $result_count;?> results found.</p>
                 </div>
+                <hr style="margin: 1 1.8rem 1 1.8rem;color: #A1A1A1;">
+                </hr>
+                <div style="margin: 1rem 1.2rem 0.5rem 1.2rem;font-size: 1.1rem;font-weight: bold;text-align: left;">
+                    Search By
+                </div>
+                <div style="margin: 1.5rem 1.2rem 1rem 1.2rem;font-size: 1rem;font-weight: normal;text-align: left;">
+                    <fieldset id="search_filter_group" style="border: none;padding:0;">
+                        <input type="radio" id="admin_id_checkbox" name="search_filter_group" />Admin ID
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input
+                            type="radio" id="name_checkbox" name="search_filter_group" checked="true" />Name<br>
+                        <input type="radio" id="hei_checkbox" name="search_filter_group" />HEI
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input
+                            type="radio" id="phone_checkbox" name="search_filter_group" />Phone<br>
+                        <input type="radio" id="status_checkbox" name="search_filter_group" />Status
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input
+                            type="radio" id="email_checkbox" name="search_filter_group" />Email<br>
+                    </fieldset>
+                </div>
 
-                <hr style="margin: 48px 1.8rem 0 1.8rem;color: #A1A1A1;">
+                <hr style="margin: 1rem 1.8rem 0 1.8rem;color: #A1A1A1;">
                 </hr>
 
                 <div class="empty_admin_preview" id="empty_admin_preview"
@@ -179,14 +197,9 @@ require 'Database Settings/database_access_credentials.php';
                 </div>
 
                 <div class="admin_details_container" id="admin_details_container"
-                    style="display: none;overflow: scroll;height: 70%;">
-
-
-
+                    style="display: none;overflow: scroll;height: calc(100% - 20rem);">
                     <br>
                     <br>
-
-
                     <!-- ADMIN ID IMAGE -->
                     <div style="display: flex;flex-wrap: wrap;width:100%;">
                         <img id="admin_display_view" src="Assets/Images/hei_default_icon.png"
@@ -198,17 +211,6 @@ require 'Database Settings/database_access_credentials.php';
                         Admin Details
                     </div>
                     <br>
-                    <!-- ADMIN ID DETAILS -->
-                    <div
-                        style="margin: 1.5rem 1.2rem 2% 1.2rem;font-size: 1rem;font-weight: normal;text-align: center;display: flex;flex-wrap: wrap;">
-                        <div style="flex: 40%;text-align: left;font-weight: bold;">
-                            Admin ID:
-                        </div>
-                        <div id="admin_id_value" class="admin_id_value" style="flex: auto;text-align: right;">
-                            ADMIN_ID_VALUE
-                        </div>
-                    </div>
-
 
                     <!-- ADMIN HEI DETAILS -->
                     <div
@@ -220,6 +222,18 @@ require 'Database Settings/database_access_credentials.php';
                             HEI_Name
                         </div>
                     </div>
+
+                    <!-- ADMIN ID DETAILS -->
+                    <div
+                        style="margin: 1.5rem 1.2rem 2% 1.2rem;font-size: 1rem;font-weight: normal;text-align: center;display: flex;flex-wrap: wrap;">
+                        <div style="flex: 40%;text-align: left;font-weight: bold;">
+                            Admin ID:
+                        </div>
+                        <div id="admin_id_value" class="admin_id_value" style="flex: auto;text-align: right;">
+                            ADMIN_ID_VALUE
+                        </div>
+                    </div>
+
 
                     <!-- ADMIN FNAME DETAILS -->
                     <div
@@ -538,6 +552,7 @@ require 'Database Settings/database_access_credentials.php';
                             style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.1rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 10px; text-overflow: ellipsis;" />
                         <br>
                         <br>
+
                         <input type="button" value="Submit" id="add_new_profile_btn"
                             style="background: #2C71EC;width: 70%;border: none;font-size: 1rem;padding: 10px;color: white;border-radius: 20px;margin: 0 15% 0 15%;" />
                         </br>
@@ -554,7 +569,7 @@ require 'Database Settings/database_access_credentials.php';
 
         <!----------------- SIDE PANEL -- EDIT ADMIN PROFILE ------------------------------------------------>
         <div id="sidebar_modal_container_edit"
-            style="z-index: 1;width: 100%;height: calc(100% - 5rem);right:0;  box-shadow: 0 0 10px rgba(0, 0, 0, 0.35);display: flex; flex-wrap: wrap;position: absolute;">
+            style="z-index: 1;width: 100%;height: calc(100% - 5rem);right:0;  box-shadow: 0 0 10px rgba(0, 0, 0, 0.35);display: none; flex-wrap: wrap;position: absolute;">
             <div id="outer_modal" style="background: #ADADAD;opacity: 0.45;flex:auto;height: 100%;"
                 onclick="closeEditModal();">
 
@@ -604,7 +619,7 @@ require 'Database Settings/database_access_credentials.php';
 
                         <br>
                         <div style="">HEI</div>
-                        <select id="edit_hei_type_selector" onchange="display_selection()"
+                        <select id="edit_hei_type_selector" onchange="edit_display_selection()"
                             style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.1rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 5px">
                             <?php
                             $query_get_hei = "select * from hei";
@@ -623,7 +638,7 @@ require 'Database Settings/database_access_credentials.php';
                             maxlength="50" name="edit_associated_hei" placeholder="e.g. squidew university" value=""
                             style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.2rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 10px;display: none;" />
                         <script>
-                        function display_selection() {
+                        function edit_display_selection() {
                             var select = document.getElementById('edit_hei_type_selector');
                             var selected_option_text = select.options[select.selectedIndex].value;
                             document.getElementById("edit_associated_hei").value = selected_option_text;
@@ -718,12 +733,12 @@ require 'Database Settings/database_access_credentials.php';
                         <br>
                         <div style="">Username</div>
                         <input type="text" class="edit_username" id="edit_username" minlength="6" maxlength="50"
-                            name="edit_username" placeholder="username"
+                            name="edit_username" placeholder="username" autocomplete="off" value=""
                             style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.1rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 10px" />
                         <br> <br>
                         <div style="">Password</div>
                         <input type="password" class="edit_password" id="edit_password" minlength="6" maxlength="50"
-                            name="edit_password" placeholder="password"
+                            name="edit_password" placeholder="password" autocomplete="new-password" value=""
                             style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.1rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 10px" />
                         <br>
                         <br>
@@ -920,6 +935,7 @@ function submitAdminRecord() {
 
 function submitAdminUpdateRecord() {
     console.log(Firebase_Admin_image_link);
+    console.log("Entered SubmitAdminUpdateRecord()");
     //Add trapping
     $.ajax({
         url: 'Functions/PHP/update_admin.php',
@@ -985,6 +1001,7 @@ function filterAdminResults() {
     document.getElementById("table_empty_set_data_display").style.display = "none";
 
     var input, filter, table, tr, td, i, txtValue, results_count;
+    var admin_id_cb, name_cb, hei_cb, phone_cb, status_cb, email_cb, filter_tab;
 
     results_count = 0;
     input = document.getElementById("search_field");
@@ -992,14 +1009,35 @@ function filterAdminResults() {
     table = document.getElementById("admin_table");
     tr = table.getElementsByTagName("tr");
 
+    admin_id_cb = document.getElementById("admin_id_checkbox");
+    name_cb = document.getElementById("name_checkbox");
+    hei_cb = document.getElementById("hei_checkbox");
+    phone_cb = document.getElementById("phone_checkbox");
+    status_cb = document.getElementById("status_checkbox");
+    email_cb = document.getElementById("email_checkbox");
+
+    if (admin_id_cb.checked) {
+        filter_tab = "0";
+    } else if (name_cb.checked) {
+        filter_tab = "2";
+    } else if (hei_cb.checked) {
+        filter_tab = "1";
+    } else if (phone_cb.checked) {
+        filter_tab = "4";
+    } else if (status_cb.checked) {
+        filter_tab = "6";
+    } else if (email_cb.checked) {
+        filter_tab = "5";
+    }
+
     for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td")[2];
+        td = tr[i].getElementsByTagName("td")[filter_tab];
         if (td) {
             txtValue = td.textContent || td.innerText;
 
             if (txtValue.toUpperCase().indexOf(filter) > -1) {
                 ++results_count;
-                console.log(results_count);
+                // console.log(results_count);
                 tr[i].style.display = "";
             } else {
                 tr[i].style.display = "none";
@@ -1014,6 +1052,27 @@ function filterAdminResults() {
             document.getElementById("table_empty_set_data_display").style.display = "block";
         }
     }
+}
+
+function setDeleteIDValue(del_id) {
+    remove_id = del_id;
+    console.log("Remove Admin ID: " + remove_id);
+
+    $.ajax({
+        url: 'Functions/PHP/delete_admin.php',
+        type: 'post',
+        data: {
+            admin_id: del_id,
+        },
+        success: function(result) {
+            // $("#result_display").html(result);
+            console.log("Successfully Deleted a record.");
+            // $(".body_container").load(window.location.href + " .body_container");
+            $(" .admin_table").load(" .admin_table");
+
+        }
+    });
+
 }
 </script>
 
@@ -1038,29 +1097,37 @@ const btn = document.querySelector('#add_new_profile_btn');
 const edit_btn = document.querySelector('#edit_new_profile_btn');
 
 btn.addEventListener('click', function(e) {
+    console.log("Form: Create new Admin Form");
     e.preventDefault();
 
     const storage = firebase.storage();
     const storageRef = storage.ref('admin/');
 
-    var file = document.querySelector('#image').files[0];
-    var name = new Date() + '-' + file.name;
+    if (document.getElementById("image").files.length == 0) {
+        //Admin will use the profile default image.
+        submitAdminRecord();
+    } else {
+        //Admin has a Profile Picture
+        var file = document.querySelector('#image').files[0];
+        var name = new Date() + '-' + file.name;
 
-    var metadata = {
-        contentType: file.type
+        var metadata = {
+            contentType: file.type
+        }
+
+        var uploadTask = storageRef.child(name).put(file, metadata);
+
+        uploadTask.then(snapshot => snapshot.ref.getDownloadURL())
+            .then(url => {
+                console.log(url);
+                document.getElementById("top_bar_loader").style.display = "block";
+                document.querySelector('#display').src = url;
+                document.querySelector('#image').value = "";
+                Firebase_Admin_image_link = url;
+                submitAdminRecord();
+            })
     }
 
-    var uploadTask = storageRef.child(name).put(file, metadata);
-
-    uploadTask.then(snapshot => snapshot.ref.getDownloadURL())
-        .then(url => {
-            console.log(url);
-            document.getElementById("top_bar_loader").style.display = "block";
-            document.querySelector('#display').src = url;
-            document.querySelector('#image').value = "";
-            Firebase_Admin_image_link = url;
-            submitAdminRecord();
-        })
 })
 
 edit_btn.addEventListener('click', function(e) {
@@ -1090,6 +1157,8 @@ edit_btn.addEventListener('click', function(e) {
     // Upload New Image on Firebase
     if (document.getElementById("edit_image").files.length === 0) {
         console.log("No new images selected.");
+        Firebase_Admin_image_link = Edit_Firebase_Admin_image_link;
+        submitAdminUpdateRecord();
     } else {
         //Upload Function
         var file = document.querySelector('#edit_image').files[0];
