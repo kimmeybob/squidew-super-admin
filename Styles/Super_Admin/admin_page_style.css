@@ -43,9 +43,9 @@ tr:nth-child(odd) {
 }
 
 tr:hover {
-  background: #287bee;
+  /* background: #287bee;
   color: white;
-  transition: 0.3s;
+  transition: 0.3s; */
 }
 
 .dropdown-content {
