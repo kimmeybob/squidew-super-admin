@@ -43,12 +43,14 @@ require 'Database Settings/database_access_credentials.php';
 
 </head>
 
-<body style="background: maroon">
+<body style="background: white">
+
     <div id="top_bar_loader"
         style="background: #287BEE;color: white;font-size: 1rem;padding: 0.5rem;text-align: left; display: none;">
         <i class="fa fa-circle-o-notch fa-spin" style="font-size:1rem;margin: 0 0.5rem 0 1rem"></i> Image is still
         uploading.
     </div>
+
     <div class="body_container" style="display: flex;margin: 0 0 0 0;background: white;height: 100%;">
 
         <!-- Side Navigation -->
@@ -93,15 +95,16 @@ require 'Database Settings/database_access_credentials.php';
                 
                 ?>
 
-                    <tr style="background: #0E203F; color: white;text-align: center;">
+                    <tr style="background: #0E203F; color: white;text-align: center;font-size: 0.9rem">
                         <th>Admin ID</th>
-                        <th>HEI</th>
                         <th>Name</th>
-                        <th>Date of Birth</th>
-                        <th>Phone Number</th>
-                        <th>Email Address</th>
+                        <th>HEI</th>
+
+                        <!-- <th>DOB</th> -->
+                        <th>Phone</th>
+                        <th>Email</th>
                         <th>Status</th>
-                        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </th>
+                        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
                     </tr>
 
                     <?php
@@ -115,12 +118,12 @@ require 'Database Settings/database_access_credentials.php';
                             $admin_status = "On Leave";
                         }
                         ?>
-                    <tr class="admin_data_row" id="admin_data_row"
+                    <tr class="admin_data_row" id="admin_data_row" style="font-size: 0.9rem;"
                         onclick="display_admin_details('<?php echo $row['admin_admin_id'];?>','<?php echo $row['hei_name'];?>','<?php echo $row['admin_first_name'];?>','<?php echo $row['admin_middle_name'];?>','<?php echo $row['admin_last_name'];?>','<?php echo $row['admin_contact_number'];?>','<?php echo $row['admin_email'];?>','<?php echo $row['admin_birthdate'];?>','<?php echo $admin_status;?>','<?php echo $row['admin_username'];?>','<?php echo $row['admin_password'];?>','<?php echo $row['admin_suffix'];?>','<?php echo $row['admin_home_address'];?>','<?php echo $row['admin_sex'];?>','<?php echo $row['admin_profile_image']?>');">
                         <td><?php echo $row['admin_admin_id'];?></td>
-                        <td><?php echo $row['hei_name'];?></td>
                         <td onclick=""><?php echo $row['admin_first_name']." ".$row['admin_last_name'];?></td>
-                        <td><?php echo $row['admin_birthdate'];?></td>
+                        <td><?php echo $row['hei_name'];?></td>
+                        <!-- <td><?php //echo $row['admin_birthdate'];?></td> -->
                         <td style=" text-align: center;"><?php echo $row['admin_contact_number']?></td>
                         <td><?php echo $row['admin_email']?></td>
                         <td><?php echo $admin_status;?></td>
@@ -409,7 +412,7 @@ require 'Database Settings/database_access_credentials.php';
                         style="display: block;height: 100%;margin: 15px;font-weight: bold;font-size: 1rem;text-align: left;">
 
                         <div style="display: flex;flex-wrap: wrap;width:100%;background: white;">
-                            <img id="display" src="Assets/Images/hei_default_icon.png"
+                            <img id="display" src="Assets/Images/admin_default_icon.png"
                                 style="box-shadow: 0px 0.873377px 3.49351px rgba(175, 175, 175, 0.25);object-fit: fit;border: none;height: 10rem;width: 10rem;background: white;border: 2px solid #C0C0C0;border-radius: 10rem;margin:auto;" />
 
                             <label for="image" class="custom-file-upload"
@@ -780,8 +783,7 @@ $(document).ready(function() {
 });
 </script>
 <script>
-var Firebase_Admin_image_link =
-    "https://firebasestorage.googleapis.com/v0/b/squidew-8401a.appspot.com/o/superadmin%2Fdefault_profile.png?alt=media&token=9632f570-bec9-4866-b8c1-77eda1c46fe5";
+var Firebase_Admin_image_link = "https://firebasestorage.googleapis.com/v0/b/squidew-8401a.appspot.com/o/admin%2Fdefault.png?alt=media&token=d007e5ca-6d03-4411-bd1b-6926940bffa8";
 
 var Edit_Firebase_Admin_image_link = "";
 

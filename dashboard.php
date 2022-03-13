@@ -48,7 +48,7 @@ require 'Database Settings/database_access_credentials.php';
         <i class="fa fa-circle-o-notch fa-spin" style="font-size:1rem;margin: 0 0.5rem 0 1rem"></i> Image is still
         uploading.
     </div>
-    <div class="body_container" style="display: flex;margin: 0 5% 0 0;">
+    <div class="body_container" style="display: flex;margin: 0 4rem 0 0;background: white;height: 100%;">
 
         <!-- Side Navigation -->
         <div class="side_nav_container" style="width: 240px;">
@@ -65,11 +65,12 @@ require 'Database Settings/database_access_credentials.php';
         $return_request_from_run_query = mysqli_num_rows($run_query) > 0;
         ?>
         <div class="hei_details_container"
-            style="flex: 11%;background:white;display: flex;flex-wrap: wrap;margin: 0 0 0 5%">
+            style="min-width:15rem;width: 10px;background:white;display: flex;flex-wrap: wrap;margin: 0 0 0 5%">
             <div style="background: white;flex: 100%;margin: 5%;">
-                <p style="background: white;color: black;font-size: 1.5rem;"><b>SQUIDEW Dashboard</b>
+                <p style="background: white;color: black;font-size: 1.25rem;"><b>SQUIDEW Dashboard</b>
                 </p>
                 <br>
+
                 <div
                     style="background: #3A72E8;flex:100%;height: 70px;display: flex;flex-wrap: wrap;border: 2px solid #3A72E8;">
                     <div
@@ -87,11 +88,12 @@ require 'Database Settings/database_access_credentials.php';
                     </div>
                     <div style="flex: 73%;background: white;display: flex;flex-wrap: wrap;">
                         <p
-                            style="margin: auto;text-align: center;color: #3A72E8;font-weight: bold;text-align:left;margin-left: 20px;font-size: 1rem;">
+                            style="margin: auto;text-align: center;color: #3A72E8;font-weight: bold;text-align:left;margin-left: 20px;font-size: 0.9rem;">
                             Total
                             HEI Partners</p>
                     </div>
                 </div>
+
                 <br>
                 <div
                     style="background: #FBEFC9;flex:100%;height: 70px;display: flex;flex-wrap: wrap;border: 2px solid #F1BE35;">
@@ -110,7 +112,7 @@ require 'Database Settings/database_access_credentials.php';
                     </div>
                     <div style="flex: 75%;background: white;display: flex;flex-wrap: wrap;">
                         <p
-                            style="margin: auto;color: #F2B54C;font-weight: bold;text-align:left;margin-left: 20px;font-size: 1rem;">
+                            style="margin: auto;color: #F2B54C;font-weight: bold;text-align:left;margin-left: 20px;font-size: 0.9rem;;">
                             Total
                             Admins</p>
                     </div>
@@ -133,7 +135,7 @@ require 'Database Settings/database_access_credentials.php';
                     </div>
                     <div style="flex: 75%;background: white;display: flex;flex-wrap: wrap;">
                         <p
-                            style="margin: auto;text-align: center;color: #FF4444;font-weight: bold;text-align:left;margin-left: 20px;font-size: 1rem;">
+                            style="margin: auto;text-align: center;color: #FF4444;font-weight: bold;text-align:left;margin-left: 20px;font-size: 0.9rem;;">
                             Reports</p>
                     </div>
                 </div>
@@ -168,11 +170,10 @@ require 'Database Settings/database_access_credentials.php';
                 ?>
 
                     <tr style="background: #0E203F; color: white;text-align: center;">
-                        <th>HEI ID No.</th>
+                        <th>HEI ID</th>
                         <th>Status</th>
                         <th style="text-align: left;">HEI Name</th>
-                        <th>HEI Type</th>
-
+                        <th>Type</th>
                         <th>SOC</th>
                         <th>EOC</th>
                         <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </th>

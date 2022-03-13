@@ -63,7 +63,7 @@ if (localStorage.getItem("admin_id") === null) {
             </script>
         </div>
         <div style="flex: 50%;display: flex;flex-wrap: wrap;text-align: left;">
-            <p style="flex:100%;overflow: hidden;color: black;padding: 0;margin:0;font-size: 1.1rem;">
+            <p style="flex:100%;overflow: hidden;color: black;padding: 0;margin:0;font-size: 1rem;">
                 <b id="admin_name">ADMIN_NAME</b>
                 <script>
                 var admin_fname = "UNATHORIZED";
@@ -91,7 +91,7 @@ if (localStorage.getItem("admin_id") === null) {
                 </script>
 
             </p>
-            <p id="admin_role" style="flex: 100%;overflow: hidden;color: black;padding: 0;margin:0;font-size: 1rem;">
+            <p id="admin_role" style="flex: 100%;overflow: hidden;color: black;padding: 0;margin:0;font-size: 0.9rem;">
                 Developer
             </p>
 
