@@ -1,81 +1,79 @@
 html {
-    /* To make use of full height of page*/
-    min-height: 100%;
-    margin: 0;
-    width: 100%;
-    overflow: hidden;
+  /* To make use of full height of page*/
+  min-height: 100%;
+  margin: 0;
+  width: 100%;
+  overflow: hidden;
 }
 
 body {
-    height: 100%;
-    width: 100%;
-    margin: 0;
+  height: 100%;
+  width: 100%;
+  margin: 0;
 }
 
 table {
-    box-shadow: 5px 5px #cecece;
+  box-shadow: 5px 5px #cecece;
 }
 
 table,
 th,
 td {
-    border: 1px solid white;
-    border-collapse: collapse;
+  border: 1px solid white;
+  border-collapse: collapse;
 }
 
 th {
-    font-weight: normal;
-    padding: 10px;
+  font-weight: normal;
+  padding: 10px;
 }
 
 td {
-    text-align: center;
+  text-align: center;
 }
 
 tr:nth-child(odd) {
-    background: #d3dff9;
+  background: #d3dff9;
 }
 
 .dropdown-content {
-    display: none;
-    position: absolute;
-    right: 0;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    z-index: 1;
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
 }
 
 .dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-    text-align: left;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
 }
 
 .dropdown-content a:hover {
-    background-color: #f1f1f1;
+  background-color: #f1f1f1;
 }
 
 .dropdown:hover .dropdown-content {
-    display: block;
+  display: block;
 }
 
 .query_sidenav {
-    border: 2px solid #cdcdcdce;
-    border-bottom: 0px;
-    border-right: 0px;
-    border-top: 0px;
+  border: 2px solid #cdcdcdce;
+  border-bottom: 0px;
+  border-right: 0px;
+  border-top: 0px;
 }
-
 
 /* Active Tab */
 
 #reports_and_feedback {
-    pointer-events: none;
-    cursor: default;
-    background: #d3dff9;
-    color: #0e203f;
-    font-weight: bold;
+  pointer-events: none;
+  cursor: default;
+  background: #d3dff9;
+  color: #0e203f;
+  font-weight: bold;
 }

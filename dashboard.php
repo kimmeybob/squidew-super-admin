@@ -72,7 +72,7 @@ require 'Database Settings/database_access_credentials.php';
                 <br>
 
                 <div
-                    style="background: #3A72E8;flex:100%;height: 70px;display: flex;flex-wrap: wrap;border: 2px solid #3A72E8;">
+                    style="background: #4474E5;flex:100%;height: 70px;display: flex;flex-wrap: wrap;border: 2px solid #4474E5;">
                     <div
                         style="flex: 25%;color: white;font-weight: bold;text-align:center;margin:auto;font-size: 150%;">
                         <?php 
@@ -88,7 +88,7 @@ require 'Database Settings/database_access_credentials.php';
                     </div>
                     <div style="flex: 73%;background: white;display: flex;flex-wrap: wrap;">
                         <p
-                            style="margin: auto;text-align: center;color: #3A72E8;font-weight: bold;text-align:left;margin-left: 20px;font-size: 0.9rem;">
+                            style="margin: auto;text-align: center;color: #4474E5;font-weight: bold;text-align:left;margin-left: 20px;font-size: 0.9rem;">
                             Total
                             HEI Partners</p>
                     </div>
@@ -96,9 +96,9 @@ require 'Database Settings/database_access_credentials.php';
 
                 <br>
                 <div
-                    style="background: #FBEFC9;flex:100%;height: 70px;display: flex;flex-wrap: wrap;border: 2px solid #F1BE35;">
+                    style="background: #4474E5;flex:100%;height: 70px;display: flex;flex-wrap: wrap;border: 2px solid #4474E5;">
                     <div
-                        style="flex: 25%;color: #F2B54C;font-weight: bold;text-align:center;margin:auto;font-size: 150%;">
+                        style="flex: 25%;color: white;font-weight: bold;text-align:center;margin:auto;font-size: 150%;">
                         <?php
                             //RETURNS ACTIVE ADMIN COUNT
                             $query_get_active_admins = "select count(admin_id) as admin_count from admin where account_status = 1";
@@ -112,16 +112,16 @@ require 'Database Settings/database_access_credentials.php';
                     </div>
                     <div style="flex: 75%;background: white;display: flex;flex-wrap: wrap;">
                         <p
-                            style="margin: auto;color: #F2B54C;font-weight: bold;text-align:left;margin-left: 20px;font-size: 0.9rem;;">
+                            style="margin: auto;color: #4474E5;font-weight: bold;text-align:left;margin-left: 20px;font-size: 0.9rem;;">
                             Total
                             Admins</p>
                     </div>
                 </div>
                 <br>
                 <div
-                    style="background: #F6AFB3;flex:100%;height: 70px;display: flex;flex-wrap: wrap;border: 2px solid #EF575C;">
+                    style="background: #4474E5;flex:100%;height: 70px;display: flex;flex-wrap: wrap;border: 2px solid #4474E5;">
                     <div
-                        style="flex: 25%;color: #FF4444;font-weight: bold;text-align:center;margin:auto;font-size: 150%;">
+                        style="flex: 25%;color: white;font-weight: bold;text-align:center;margin:auto;font-size: 150%;">
                         <?php
                             //RETURNS BUG REPORT COUNT
                             $query_get_report_bugs = "select count(report_id) as report_bugs_count from report_bug";
@@ -135,7 +135,7 @@ require 'Database Settings/database_access_credentials.php';
                     </div>
                     <div style="flex: 75%;background: white;display: flex;flex-wrap: wrap;">
                         <p
-                            style="margin: auto;text-align: center;color: #FF4444;font-weight: bold;text-align:left;margin-left: 20px;font-size: 0.9rem;;">
+                            style="margin: auto;text-align: center;color: #4474E5;font-weight: bold;text-align:left;margin-left: 20px;font-size: 0.9rem;;">
                             Reports</p>
                     </div>
                 </div>

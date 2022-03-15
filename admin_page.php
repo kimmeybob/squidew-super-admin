@@ -13,7 +13,7 @@ require 'Database Settings/database_access_credentials.php';
 
 ?>
 
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -775,15 +775,15 @@ $(document).ready(function() {
             },
             success: function(result) {
                 // $(".body_container").load(window.location.href + " .body_container");
-                $(".main_data_container").load(window.location.href +
-                    ".main_data_container");
+                $(".main_data_container").load(".main_data_container");
             }
         });
     });
 });
 </script>
 <script>
-var Firebase_Admin_image_link = "https://firebasestorage.googleapis.com/v0/b/squidew-8401a.appspot.com/o/admin%2Fdefault.png?alt=media&token=d007e5ca-6d03-4411-bd1b-6926940bffa8";
+var Firebase_Admin_image_link =
+    "https://firebasestorage.googleapis.com/v0/b/squidew-8401a.appspot.com/o/admin%2Fdefault.png?alt=media&token=d007e5ca-6d03-4411-bd1b-6926940bffa8";
 
 var Edit_Firebase_Admin_image_link = "";
 
@@ -1021,15 +1021,15 @@ function filterAdminResults() {
     if (admin_id_cb.checked) {
         filter_tab = "0";
     } else if (name_cb.checked) {
-        filter_tab = "2";
-    } else if (hei_cb.checked) {
         filter_tab = "1";
+    } else if (hei_cb.checked) {
+        filter_tab = "2";
     } else if (phone_cb.checked) {
-        filter_tab = "4";
+        filter_tab = "3";
     } else if (status_cb.checked) {
-        filter_tab = "6";
-    } else if (email_cb.checked) {
         filter_tab = "5";
+    } else if (email_cb.checked) {
+        filter_tab = "4";
     }
 
     for (i = 0; i < tr.length; i++) {
@@ -1039,7 +1039,7 @@ function filterAdminResults() {
 
             if (txtValue.toUpperCase().indexOf(filter) > -1) {
                 ++results_count;
-                // console.log(results_count);
+                console.log(results_count);
                 tr[i].style.display = "";
             } else {
                 tr[i].style.display = "none";

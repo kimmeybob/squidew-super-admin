@@ -27,8 +27,6 @@ require 'Database Settings/database_access_credentials.php';
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="<?php echo $robot_reg_link;?>" rel="stylesheet">
 
-
-
     <!-- JQuery Specific Version for this Page. -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
@@ -38,7 +36,7 @@ require 'Database Settings/database_access_credentials.php';
 </head>
 
 <body>
-<div id="top_bar_loader"
+    <div id="top_bar_loader"
         style="background: #287BEE;color: white;font-size: 1rem;padding: 0.5rem;text-align: left; display: none;">
         <i class="fa fa-circle-o-notch fa-spin" style="font-size:1rem;margin: 0 0.5rem 0 1rem"></i> Image is still
         uploading.
@@ -61,30 +59,24 @@ require 'Database Settings/database_access_credentials.php';
             <div style="flex: 70%;margin: 5% 5% 5% 0%;">
 
                 <div style="background: white;flex: 100%;display: flex;flex-wrap: wrap;">
-                    <p style="flex: 60%;color: black;overflow: hidden;font-size: 1.2rem;font-weight: bold;">Reports and Feedbacks</p>
+                    <p style="flex: 60%;color: black;overflow: hidden;font-size: 1.2rem;font-weight: bold;">Reports and
+                        Feedbacks</p>
                     <div style="background:white;flex: 15%;color: black;overflow: hidden;margin:auto;text-align: left;">
                     </div>
-                    <div
-                        style="background:white;flex: 20%;color: black;overflow: hidden;margin:auto;text-align: right;">
-                        <button
-                            style="flex: auto;font-size:1rem;background: #3A72E8;border: none;padding: 3% 10% 3% 10%;border-radius: 50px;color: white;"
-                            onclick="openModal();">
-                            Add Admin
-                        </button>
-                    </div>
+
                 </div>
 
                 <!-- Table -->
-                <table id="admin_table" class="admin_table" style="width:100%;">
+                <table id="report_table" class="report_table" style="width:100%;">
                     <?php
-                
-                $query = "select admin.admin_id as admin_admin_id, admin.first_name as admin_first_name, admin.middle_name as admin_middle_name, admin.last_name as admin_last_name, admin.email as admin_email, admin.contact_number as admin_contact_number, admin.birthdate as admin_birthdate, admin.username as admin_username, admin.password as admin_password, admin.account_status as admin_account_status, admin.hei_id as admin_hei_id, admin.suffix as admin_suffix, admin.sex as admin_sex, admin.home_address as admin_home_address, admin.profile_image as admin_profile_image, hei.hei_name as hei_name from admin inner join hei on admin.hei_id = hei.hei_id;";
+                $query = "select * from report_bug";
                 $run_query = mysqli_query($connection,$query);
                 $return_request_from_run_query = mysqli_num_rows($run_query) > 0;
+                
 
                 //Number of results
                 $result_count = mysqli_num_rows($run_query);
-                
+
                 ?>
 
                     <tr style="background: #0E203F; color: white;text-align: center;font-size: 0.9rem">
@@ -94,44 +86,83 @@ require 'Database Settings/database_access_credentials.php';
 
                         <!-- <th>DOB</th> -->
                         <th>Status</th>
-                
+
                         <th>Assignee</th>
                         <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
                     </tr>
 
                     <?php
                     while($row = mysqli_fetch_array($run_query)){
-                        $admin_status = "Active";
-                        if($row['admin_account_status'] == 0){
-                            $admin_status = "Offline";
-                        }else if($row['admin_account_status'] == 1){
-                            $admin_status = "Active";
-                        }else{
-                            $admin_status = "On Leave";
+                        //Super Admin ID assigned in Report_bug table
+                        $super_admin_collected_id = $row['super_admin_id'];
+                        
+                        //FOR SUPER ADMIN
+                        $query_super_admin_accounts = "select * from super_admin_account where super_admin_account.super_admin_id = ".$super_admin_collected_id.";";
+                        $sub_run_query = mysqli_query($connection,$query_super_admin_accounts);
+                        $return_request_from_run_query_2 = mysqli_num_rows($sub_run_query) > 0;
+
+
+                        //Super Admin Vars
+                        $sa_first_name = "null";
+                        $sa_last_name = "";
+                        $sa_suffix = "";
+                        while($sub_row = mysqli_fetch_array($sub_run_query)){
+                            $sa_first_name = $sub_row['first_name'];
+                            $sa_last_name = $sub_row['last_name'];
+                            $sa_suffix = $sub_row['suffix'];
                         }
+                        
                         ?>
-                    <tr class="admin_data_row" id="admin_data_row" style="font-size: 0.9rem;"
-                        onclick="display_admin_details('<?php echo $row['admin_admin_id'];?>','<?php echo $row['hei_name'];?>','<?php echo $row['admin_first_name'];?>','<?php echo $row['admin_middle_name'];?>','<?php echo $row['admin_last_name'];?>','<?php echo $row['admin_contact_number'];?>','<?php echo $row['admin_email'];?>','<?php echo $row['admin_birthdate'];?>','<?php echo $admin_status;?>','<?php echo $row['admin_username'];?>','<?php echo $row['admin_password'];?>','<?php echo $row['admin_suffix'];?>','<?php echo $row['admin_home_address'];?>','<?php echo $row['admin_sex'];?>','<?php echo $row['admin_profile_image']?>');">
-                        <td><?php echo $row['admin_admin_id'];?></td>
-                        <td onclick=""><?php echo $row['admin_first_name']." ".$row['admin_last_name'];?></td>
-                        <td><?php echo $row['hei_name'];?></td>
-                        <!-- <td><?php //echo $row['admin_birthdate'];?></td> -->
-                        <td style=" text-align: center;"><?php echo $row['admin_contact_number']?></td>
-                        <td><?php echo $row['admin_email']?></td>
+
+
+                    <tr class="edit_data_row" id="edit_data_row" style="font-size: 0.9rem;"
+                        onclick="display_feedback_details('<?php echo $row['report_id'];?>','<?php echo $row['super_admin_id'];?>','<?php echo $row['status'];?>','<?php echo $row['report_time'];?>','<?php echo $row['email'];?>','<?php echo $row['report_message'];?>');">
+                        <td><?php echo $row['report_id'];?></td>
+                        <td><?php echo $row['report_time'];?></td>
+                        <td><?php echo $row['email'];?></td>
+                        <?php
+                        
+                        $status_string_value = "Pending";
+                        if($row['status'] == "0"){
+                            $status_string_value = "Pending";
+                        }else if($row['status'] == "1"){
+                            $status_string_value = "In-Progress";
+                        }else if($row['status'] == "2"){
+                            $status_string_value = "Done";
+                        }else{
+                            $status_string_value = "Unknown";
+                        }
+
+                        ?>
+                        <td><?php echo $status_string_value;?></td>
+                        <?php 
+                        
+                        if($row['super_admin_id'] == "0"){
+                            ?>
+                        <td style=""><?php echo 'UNASSIGNED'?></td>
+                        <?php
+                        }else{
+                        ?>
+                        <td style=""><?php echo $sa_first_name." ".$sa_last_name." ".$sa_suffix;?></td>
+                        <?php 
+                        }
+                         ?>
                         <td onclick="">
                             <div class="dropdown" style="margin: auto;">
                                 <button class="dropdown"
                                     style="margin: auto;background: white;width: 25px;height: 25px;border-radius: 25px;border: 1px solid #A1A1A1;box-shadow: 0 0 1px rgba(0, 0, 0, 0.35)">
                                     ...
                                 </button>
-
                                 <div class="dropdown-content">
                                     <a style="color: grey;font-size: 0.8rem;pointer-events: none;">Options</a>
-                                    <a onclick="display_admin_details('<?php echo $row['admin_admin_id'];?>','<?php echo $row['hei_name'];?>','<?php echo $row['admin_first_name'];?>','<?php echo $row['admin_middle_name'];?>','<?php echo $row['admin_last_name'];?>','<?php echo $row['admin_contact_number']?>','<?php echo $row['admin_email'];?>','<?php echo $row['admin_birthdate'];?>','<?php echo $admin_status;?>','<?php echo $row['admin_username'];?>','<?php echo $row['admin_password'];?>','<?php echo $row['admin_suffix']?>','<?php echo $row['admin_home_address']?>','<?php echo $row['admin_sex']?>','<?php echo $row['admin_profile_image']?>');"
+                                    <!-- View  -->
+                                    <a onclick="display_feedback_details('<?php echo $row['report_id'];?>','<?php echo $row['super_admin_id'];?>','<?php echo $row['status'];?>','<?php echo $row['report_time'];?>','<?php echo $row['email'];?>','<?php echo $row['report_message'];?>');"
                                         style="color: #287BEE;cursor: default;">View</a>
-                                    <a onclick="edit_admin_details('<?php echo $row['admin_admin_id'];?>','<?php echo $row['hei_name'];?>','<?php echo $row['admin_first_name'];?>','<?php echo $row['admin_middle_name'];?>','<?php echo $row['admin_last_name'];?>','<?php echo $row['admin_contact_number']?>','<?php echo $row['admin_email'];?>','<?php echo $row['admin_birthdate'];?>','<?php echo $admin_status;?>','<?php echo $row['admin_username'];?>','<?php echo $row['admin_password'];?>','<?php echo $row['admin_suffix']?>','<?php echo $row['admin_home_address']?>','<?php echo $row['admin_sex']?>','<?php echo $row['admin_profile_image']?>')"
+                                    <!-- Edit -->
+                                    <a onclick="edit_feedback_details('<?php echo $row['report_id'];?>','<?php echo $row['super_admin_id'];?>','<?php echo $row['status'];?>','<?php echo $row['report_time'];?>','<?php echo $row['email'];?>','<?php echo $row['report_message'];?>')"
                                         ; style="cursor: default;">Edit</a>
-                                    <a onclick="setDeleteIDValue(<?php echo $row['admin_admin_id'];?>)"
+                                    <!-- Remove -->
+                                    <a onclick="remove_report('<?php echo $row['report_id'];?>')"
                                         style="color: #EF575C;cursor: default;">Remove</a>
                                 </div>
                             </div>
@@ -145,10 +176,12 @@ require 'Database Settings/database_access_credentials.php';
                     class="table_empty_set_data_display">We coudn't find any results for your query.</p>
 
             </div>
-            <!-- Side Navigation -->
 
+            <!-- Side Navigation -->
             <div class="query_sidenav" style="width: 280px;padding: 0px;height: calc(100% - 5rem);">
 
+
+                <!-- SEARCH MODULE BLOCK -->
                 <div style="margin: 48px 1.2rem 2% 1.2rem;font-size: 1.2rem;font-weight: bold;text-align: left;">
                     Search
                 </div>
@@ -156,7 +189,7 @@ require 'Database Settings/database_access_credentials.php';
                     <input type="text" id="search_field" class="search_field" maxlength="50" placeholder="Search..."
                         style="font-size: 1rem;padding: 0.3rem 0.2rem 0.3rem 0.5rem;width: 60%;border-radius: 1rem;border: 1px solid #A1A1A1;" />
                     <input type="button" value="Search" id="search_btn" class="search_btn"
-                        onclick="filterAdminResults()"
+                        onclick="filterReportsResults()"
                         style="margin: 0 0 0 5%;font-size: 1rem;padding: 0.3rem 0.2rem 0.3rem 0.2rem;width: 35%;border-radius: 1rem;background: #287BEE;border: none;color: white;" />
                 </div>
                 <div
@@ -168,591 +201,491 @@ require 'Database Settings/database_access_credentials.php';
                 <div style="margin: 1rem 1.2rem 0.5rem 1.2rem;font-size: 1.1rem;font-weight: bold;text-align: left;">
                     Search By
                 </div>
+
                 <div style="margin: 1.5rem 1.2rem 1rem 1.2rem;font-size: 1rem;font-weight: normal;text-align: left;">
                     <fieldset id="search_filter_group" style="border: none;padding:0;">
-                        <input type="radio" id="admin_id_checkbox" name="search_filter_group" />Admin ID
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input
-                            type="radio" id="name_checkbox" name="search_filter_group" checked="true" />Name<br>
-                        <input type="radio" id="hei_checkbox" name="search_filter_group" />HEI
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input
-                            type="radio" id="phone_checkbox" name="search_filter_group" />Phone<br>
-                        <input type="radio" id="status_checkbox" name="search_filter_group" />Status
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input
-                            type="radio" id="email_checkbox" name="search_filter_group" />Email<br>
+                        <input type="radio" id="report_id_radio" name="search_filter_group" />Report ID
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" id="report_email_radio" name="search_filter_group"
+                            checked="true" />Email<br>
+                        <input type="radio" id="report_status_radio" name="search_filter_group" />Status
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" id="report_assignee_radio" name="search_filter_group" />Assignee<br>
                     </fieldset>
                 </div>
+                <!-- END OF SEARCH MODULE BLOCK -->
 
                 <hr style="margin: 1rem 1.8rem 0 1.8rem;color: #A1A1A1;">
                 </hr>
 
-                <div class="empty_admin_preview" id="empty_admin_preview"
+                <div class="empty_report_bug_preview" id="empty_report_bug_preview"
                     style="margin: 48px 1.2rem 0 1.2rem;font-size: 1rem;font-weight: normal;text-align: center;display: block;color: #5E5E5E;">
-                    Select an Admin to Preview.
+                    Select a Report to Preview.
                 </div>
 
-                <div class="admin_details_container" id="admin_details_container"
+                <div class="report_bug_details_container" id="report_bug_details_container"
                     style="display: none;overflow: scroll;height: calc(100% - 20rem);">
-                    <br>
-                    <br>
-                    <!-- ADMIN ID IMAGE -->
-                    <div style="display: flex;flex-wrap: wrap;width:100%;">
-                        <img id="admin_display_view" src="Assets/Images/hei_default_icon.png"
-                            style="box-shadow: 0px 0.873377px 3.49351px rgba(175, 175, 175, 0.25);object-fit: fit;border: none;height: 7rem;width: 7rem;background: white;border: 2px solid #C0C0C0;border-radius: 10rem;margin:auto;" />
-                    </div>
 
-
-                    <div style="margin: 32px 1.2rem 2% 1.2rem;font-size: 1.2rem;font-weight: bold;text-align: center;">
-                        Admin Details
+                    <div style="margin: 32px 1.2rem 2% 1.2rem;font-size: 1.2rem;font-weight: bold;text-align: left;">
+                        Report Details
                     </div>
                     <br>
 
-                    <!-- ADMIN HEI DETAILS -->
+                    <!-- REPORT ID DETAILS -->
                     <div
                         style="margin: 1rem 1.2rem 2% 1.2rem;font-size: 1rem;font-weight: normal;text-align: center;display: flex;flex-wrap: wrap;">
                         <div style="flex: 10%;text-align: left;font-weight: bold;">
-                            HEI:
+                            Report ID:
                         </div>
-                        <div class="admin_hei_value" id="admin_hei_value" style="flex: auto;text-align: right;">
-                            HEI_Name
-                        </div>
-                    </div>
-
-                    <!-- ADMIN ID DETAILS -->
-                    <div
-                        style="margin: 1.5rem 1.2rem 2% 1.2rem;font-size: 1rem;font-weight: normal;text-align: center;display: flex;flex-wrap: wrap;">
-                        <div style="flex: 40%;text-align: left;font-weight: bold;">
-                            Admin ID:
-                        </div>
-                        <div id="admin_id_value" class="admin_id_value" style="flex: auto;text-align: right;">
-                            ADMIN_ID_VALUE
+                        <div class="report_id_value" id="report_id_value" style="flex: auto;text-align: right;">
+                            REPORT_ID
                         </div>
                     </div>
 
-
-                    <!-- ADMIN FNAME DETAILS -->
+                    <!-- REPORT ASSIGNEE DETAILS -->
                     <div
                         style="margin: 1rem 1.2rem 2% 1.2rem;font-size: 1rem;font-weight: normal;text-align: center;display: flex;flex-wrap: wrap;">
-                        <div style="flex: 40%;text-align: left;font-weight: bold;">
-                            First Name:
+                        <div style="flex: 100%;text-align: left;font-weight: bold;">
+                            Assignee:
                         </div>
-                        <div class="admin_fname" id="admin_fname" style="flex: auto;text-align: right;">
-                            FIRST_NAME
+
+                        <div class="report_assignee_value_container" id="report_assignee_value_container"
+                            style="flex: auto;text-align: right;">
+                            <select id="report_assignee_value" disabled onchange="submit_assignee_changes()"
+                                style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.1rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 5px">
+
+                                <?php 
+                                    $query_get_super_admins = "select * from super_admin_account";
+                                    $query_run = mysqli_query($connection, $query_get_super_admins);
+                                    $return_request_from_get_admin_query = mysqli_num_rows($query_run) > 0;
+                                
+                                    while($row = mysqli_fetch_array($query_run)){
+                                        ?>
+                                <option value="<?php echo $row['super_admin_id']?>">
+                                    <?php echo $row['first_name'].' '.$row['last_name'].' '.$row['suffix'];?></option>
+                                <?php
+                                    }
+                                ?>
+                            </select>
                         </div>
+
                     </div>
 
-                    <!-- ADMIN MNAME DETAILS -->
+                    <!-- REPORT StATUS DETAILS -->
                     <div
-                        style="margin: 1rem 1.2rem 2% 1.2rem;font-size: 1rem;font-weight: normal;text-align: center;display: flex;flex-wrap: wrap;">
-                        <div style="flex: 40%;text-align: left;font-weight: bold;">
-                            Middle Name:
-                        </div>
-                        <div class="admin_mname" id="admin_mname" style="flex: auto;text-align: right;">
-                            MIDDLE_NAME
-                        </div>
-                    </div>
-
-                    <!-- ADMIN LNAME DETAILS -->
-                    <div
-                        style="margin: 1rem 1.2rem 2% 1.2rem;font-size: 1rem;font-weight: normal;text-align: center;display: flex;flex-wrap: wrap;">
-                        <div style="flex: 40%;text-align: left;font-weight: bold;">
-                            Last Name:
-                        </div>
-                        <div class="admin_lname" id="admin_lname" style="flex: auto;text-align: right;">
-                            LAST_NAME
-                        </div>
-                    </div>
-
-                    <!-- ADMIN SUFFIX DETAILS -->
-                    <div
-                        style="margin: 1rem 1.2rem 2% 1.2rem;font-size: 1rem;font-weight: normal;text-align: center;display: flex;flex-wrap: wrap;">
-                        <div style="flex: 40%;text-align: left;font-weight: bold;">
-                            Suffix:
-                        </div>
-                        <div class="admin_suffix" id="admin_suffix" style="flex: auto;text-align: right;">
-
-                        </div>
-                    </div>
-
-
-                    <!-- ADMIN GENDER DETAILS -->
-                    <div
-                        style="margin: 1rem 1.2rem 2% 1.2rem;font-size: 1rem;font-weight: normal;text-align: center;display: flex;flex-wrap: wrap;">
-                        <div style="flex: 40%;text-align: left;font-weight: bold;">
-                            Gender:
-                        </div>
-                        <div class="admin_gender" id="admin_gender" style="flex: auto;text-align: right;">
-                            M
-                        </div>
-                    </div>
-
-                    <!-- ADMIN DATE OF BIRTH DETAILS -->
-                    <div
-                        style="margin: 1rem 1.2rem 2% 1.2rem;font-size: 1rem;font-weight: normal;text-align: center;display: flex;flex-wrap: wrap;">
-                        <div style="flex: 20%;text-align: left;font-weight: bold;">
-                            DOB:
-                        </div>
-                        <div class="admin_DOB" id="admin_DOB" style="flex: auto;text-align: right;">
-                            DATE_OF_BIRTH
-                        </div>
-                    </div>
-
-                    <!-- ADMIN CONTACT DETAILS -->
-                    <div
-                        style="margin: 1rem 1.2rem 2% 1.2rem;font-size: 1rem;font-weight: normal;text-align: center;display: flex;flex-wrap: wrap;">
-                        <div style="flex: 40%;text-align: left;font-weight: bold;">
-                            Phone:
-                        </div>
-                        <div class="admin_contact" id="admin_contact" style="flex: auto;text-align: right;">
-                            CONTACT_NUMBER
-                        </div>
-                    </div>
-
-
-
-                    <!-- ADMIN EMAIL DETAILS -->
-                    <div
-                        style="margin: 1rem 1.2rem 2% 1.2rem;font-size: 1rem;font-weight: normal;text-align: center;display: flex;flex-wrap: wrap;">
-                        <div style="flex: 20%;text-align: left;font-weight: bold;">
-                            Email:
-                        </div>
-                        <div class="admin_email" id="admin_email" style="flex: auto;text-align: right;">
-                            EMAIL_ADDRESS
-                        </div>
-                    </div>
-
-                    <!-- ADMIN USERNAME DETAILS -->
-                    <div
-                        style="margin: 1rem 1.2rem 2% 1.2rem;font-size: 1rem;font-weight: normal;text-align: center;display: none;flex-wrap: wrap;">
-                        <div style="flex: 40%;text-align: left;font-weight: bold;">
-                            Username:
-                        </div>
-                        <div class="admin_username" id="admin_username" style="flex: auto;text-align: right;">
-                            ADMIN_USERNAME
-                        </div>
-                    </div>
-
-                    <!-- ADMIN PASSWORD DETAILS -->
-                    <div
-                        style="margin: 1rem 1.2rem 2% 1.2rem;font-size: 1rem;font-weight: normal;text-align: center;display: none;flex-wrap: wrap;">
-                        <div style="flex: 40%;text-align: left;font-weight: bold;">
-                            Password:
-                        </div>
-                        <div class="admin_password" id="admin_password" style="flex: auto;text-align: right;">
-                            ADMIN_PASSWORD
-                        </div>
-                    </div>
-
-                    <!-- ADMIN STATUS DETAILS -->
-                    <div
-                        style="margin: 1rem 1.2rem 2% 1.2rem;font-size: 1rem;font-weight: normal;text-align: center;display: flex;flex-wrap: wrap;">
-                        <div style="flex: 40%;text-align: left;font-weight: bold;">
+                        style="margin: 0.5rem 1.2rem 2% 1.2rem;font-size: 1rem;font-weight: normal;text-align: center;display: flex;flex-wrap: wrap;">
+                        <div style="flex: 100%;text-align: left;font-weight: bold;">
                             Status:
                         </div>
-                        <div class="admin_status" id="admin_status" style="flex: auto;text-align: right;">
-                            ACCOUNT_STATUS
+                        <div class="report_status_value_container" id="report_status_value_container"
+                            style="flex: auto;text-align: right;">
+                            <select id="report_status_value" disabled onchange="submit_status_changes()"
+                                style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.1rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 5px">
+                                <option value="0">Pending</option>
+                                <option value="1">In-Progress</option>
+                                <option value="2">Done</option>
+                            </select>
                         </div>
                     </div>
 
-                    <!-- ADMIN HOME ADDRESS DETAILS -->
-                    <hr style="margin: 0 1.8rem 0 1.8rem;color: #A1A1A1;display: none;">
-                    </hr>
-
+                    <!-- REPROT DATE AND TIME DETAILS -->
                     <div
-                        style="margin: 1rem 1.2rem 2% 1.2rem;font-size: 1rem;font-weight: normal;text-align: center;display: block;">
-                        <div style="text-align: left;font-weight: bold;">
-                            Home Address:
+                        style="margin: 1rem 1.2rem 2% 1.2rem;font-size: 1rem;font-weight: normal;text-align: center;display: flex;flex-wrap: wrap;">
+                        <div style="flex: 30%;text-align: left;font-weight: bold;">
+                            D/T:
+                        </div>
+                        <div class="report_date_and_time" id="report_date_and_time"
+                            style="flex: auto;text-align: right;">
+                            DATE_AND_TIME
+                        </div>
+                    </div>
+
+                    <!-- REPORTER EMAIL DETAILS -->
+                    <div
+                        style="margin: 1rem 1.2rem 2% 1.2rem;font-size: 1rem;font-weight: normal;text-align: center;display: flex;flex-wrap: wrap;">
+                        <div style="flex: 10%;text-align: left;font-weight: bold;">
+                            Email:
+                        </div>
+                        <div class="reporter_email" id="reporter_email" style="flex: auto;text-align: right;">
+                            REPORTER_EMAIL
+                        </div>
+                    </div>
+
+                    <!-- REPORTER MESSAGE DETAILS -->
+                    <div
+                        style="margin: 1rem 1.2rem 2% 1.2rem;font-size: 1rem;font-weight: normal;text-align: center;display: flex;flex-wrap: wrap;">
+                        <div style="flex: 100%;text-align: left;font-weight: bold;">
+                            Message:
                         </div>
                         <br>
-                        <div class="admin_address" id="admin_address" style="text-align: left;">
-                            18M DELA CONCEPTION ST. PASIL CEBU CITY
+                        <br>
+                        <div class="report_message" id="report_message"
+                            style="flex: auto;flex-wrap: wrap;text-align: left;;background:#F1F2F2;border: 0.1rem solid black;padding: 0.5rem">
+                            MIDDLE_NAME asdasdasdasdasdasdasd
+                            MIDDLE_NAME
+                            MIDDLE_NAME
+                            MIDDLE_NAME
+                            MIDDLE_NAME
+                            MIDDLE_NAME
+                            MIDDLE_NAME
+                            MIDDLE_NAME
+                            MIDDLE_NAMEMIDDLE_NAME
+                            MIDDLE_NAME
+                            MIDDLE_NAME
                         </div>
+                        <br>
+                        <br>
                     </div>
                 </div>
             </div>
         </div>
         <!-- END of Main Content Container -->
-
-
-        <!----------------- SIDE PANEL -- ADD ADMIN PROFILE ------------------------------------------------>
-        <div id="sidebar_modal_container_add"
-            style="z-index: 1;width: 100%;height: calc(100% - 5rem);right:0;  box-shadow: 0 0 10px rgba(0, 0, 0, 0.35);display: none; flex-wrap: wrap;position: absolute;">
-            <div id="outer_modal" style="background: #ADADAD;opacity: 0.45;flex:auto;height: 100%;"
-                onclick="closeModal();">
-
-            </div>
-            <div style="right: 280px;margin:0;width: auto;position: fixed;z-index: 2;" onclick="closeModal();">
-                <div style="background: #4475E6;padding: 0.6rem 0.9rem;">
-                    <i class="fa-solid fa-xmark" style="color: white;font-size: 1.2rem;"></i>
-                </div>
-                <div style="background: #ADADAD;opacity: 0.45;"></div>
-            </div>
-
-            <div id="sidebar_modal_add"
-                style="height: 100%;background: white;z-index: 2;width: 280px;display: flex;box-shadow: 0 0 10px rgba(0, 0, 0, 0.35);display: flex;flex-wrap: wrap;">
-
-                <div
-                    style="flex: auto;height: 5%;margin: 1rem 15px 0 15px;text-align: center;overflow: hidden;line-height: 1;">
-                    <p style="font-size: 1.3rem;font-weight: bold">Add Admin Account</p>
-                </div>
-
-                <div
-                    style="flex: auto;height: calc(100% - 5rem);margin: 2rem 15px 15px 15px;text-align: center;overflow: scroll">
-
-                    <!-- FORM  -->
-                    <form method="POST" id="createForm"
-                        style="display: block;height: 100%;margin: 15px;font-weight: bold;font-size: 1rem;text-align: left;">
-
-                        <div style="display: flex;flex-wrap: wrap;width:100%;background: white;">
-                            <img id="display" src="Assets/Images/admin_default_icon.png"
-                                style="box-shadow: 0px 0.873377px 3.49351px rgba(175, 175, 175, 0.25);object-fit: fit;border: none;height: 10rem;width: 10rem;background: white;border: 2px solid #C0C0C0;border-radius: 10rem;margin:auto;" />
-
-                            <label for="image" class="custom-file-upload"
-                                style="color: #287BEE;border-radius: 1rem;border: 1px solid #A1A1A1;display: inline-block;padding: 6px 12px;cursor: pointer;margin: auto;margin-top: 1rem;font-weight: bold;">
-                                Upload an Image
-                            </label>
-                            <input type="file" id="image" style="  display: none;" />
-
-                        </div>
-                        </br></br>
-
-                        <div style="display: flex;flex-wrap: wrap;width:100%;">
-
-                            <div style="width: 50%;">Admin ID No.</div>
-
-                            <?php 
-                             $query_get_last_admin_id = "select auto_increment from information_schema.tables where table_name = 'admin' and table_schema = DATABASE();";
-                             $query_run = mysqli_query($connection, $query_get_last_admin_id);
-                             $return_request_from_get_last_admin_id = mysqli_num_rows($query_run) > 0;
-     
-                             $last_admin_id_value = 0;
-
-                             while($row = mysqli_fetch_array($query_run)){
-                                $last_admin_id_value = (int)$row['auto_increment'];
-                            }
-                            ?>
-
-                            <input type="text" class="add_admin_id" id="add_admin_id" minlength="3" maxlength="50"
-                                name="add_admin_id" value="<?php echo $last_admin_id_value;?>" value="DEFAULT_ID"
-                                style="pointer-events: none;cursor: default;border: none;width: 50%;font-size: 1.2rem;font-weight: normal;text-align: right;" />
-                        </div>
-
-                        <br>
-                        <div style="">HEI</div>
-                        <select id="hei_type_selector" onchange="display_selection()"
-                            style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.1rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 5px">
-                            <option value="default" style="color:  #A1A1A1;">Select an HEI</option>
-                            <?php
-                            
-                            $query_get_hei = "select * from hei";
-                            $query_run = mysqli_query($connection, $query_get_hei);
-                            $return_request_from_get_hei = mysqli_num_rows($query_run);
-
-                            while($row = mysqli_fetch_array($query_run)){
-                                ?>
-                            <option value="<?php echo $row['hei_id'];?>"><?php echo $row['hei_name'];?></option>
-                            <?php
-                            }
-                            ?>
-                        </select>
-
-                        <input type="text" class="associated_hei" id="associated_hei" minlength="3" maxlength="50"
-                            name="associated_hei" placeholder="e.g. squidew university" value=""
-                            style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.2rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 10px;display: none;" />
-                        <script>
-                        function display_selection() {
-                            var select = document.getElementById('hei_type_selector');
-                            var selected_option_text = select.options[select.selectedIndex].value;
-                            document.getElementById("associated_hei").value = selected_option_text;
-                            console.log(selected_option_text);
-                        }
-                        </script>
-
-                        <br>
-                        <br>
-                        <div style="">First Name</div>
-                        <input type="text" class="add_admin_fname" id="add_admin_fname" minlength="3" maxlength="50"
-                            name="add_admin_fname" placeholder="e.g. squidew university"
-                            style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.1rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 10px"
-                            required />
-
-                        <br>
-                        <br>
-                        <div style="">Middle Name</div>
-                        <input type="text" class="add_admin_mname" id="add_admin_mname" minlength="3" maxlength="50"
-                            name="add_admin_mname" placeholder="e.g. squidew university"
-                            style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.1rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 10px"
-                            required />
-
-                        <br>
-                        <br>
-                        <div style="">Last Name</div>
-                        <input type="text" class="add_admin_lname" id="add_admin_lname" minlength="3" maxlength="50"
-                            name="add_admin_lname" placeholder="e.g. squidew university"
-                            style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.1rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 10px"
-                            required />
-                        <br>
-                        <br>
-                        <div style="">Suffix</div>
-                        <input type="text" class="add_suffix" id="add_suffix" minlength="3" maxlength="50"
-                            name="add_suffix" placeholder="e.g. I, II, II, JR. SR."
-                            style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.1rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 10px"
-                            required />
-                        <br>
-                        <br>
-                        <div style="">Gender</div>
-                        <select id="add_gender_selector" onchange="add_gender_selection()"
-                            style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.1rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 5px">
-                            <option value="m">Male</option>
-                            <option value="f">Female</option>
-                        </select>
-
-                        <input type="text" class="add_gender" id="add_gender" minlength="3" maxlength="50"
-                            name="add_gender" value="m"
-                            style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.2rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 10px;display: none;" />
-                        <script>
-                        function add_gender_selection() {
-                            var select = document.getElementById('add_gender_selector');
-                            var selected_option_text = select.options[select.selectedIndex].value;
-                            document.getElementById("add_gender").value = selected_option_text;
-                            console.log(selected_option_text);
-                            // alert(document.getElementById("hei_type").value);
-                        }
-                        </script>
-                        <br>
-                        <br>
-                        <div style="">Email</div>
-                        <input type="text" class="add_email" id="add_email" minlength="3" maxlength="50"
-                            name="add_email" placeholder="e.g. carlkim@squidew.com"
-                            style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.1rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 10px"
-                            required />
-                        <br>
-                        <br>
-                        <div style="">Date Of Birth</div>
-                        <input type="date" class="add_birthdate" id="add_birthdate" minlength="3" maxlength="50"
-                            name="add_birthdate" placeholder="e.g. squidew university"
-                            style="border: none;margin: 10 0 10 0;width: 100%;font-size: 0.9rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 10px;display: flex;" />
-                        <br>
-                        <div style="">Contact Number</div>
-                        <input type="text" class="add_contact_number" id="add_contact_number" minlength="3"
-                            maxlength="50" name="add_contact_number" placeholder="e.g. XXXXXXXXXXX"
-                            style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.1rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 10px"
-                            required />
-                        <br>
-                        <br>
-                        <div style="">Home Address<span style="color: #267CCA"></span></div>
-                        <input type="text" class="add_admin_location" minlength="3" maxlength="50"
-                            name="add_admin_location" id="add_admin_location"
-                            placeholder="e.g. 18M Dela Conception St. Pasil Cebu City"
-                            style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.1rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 10px; text-overflow: ellipsis;" />
-                        <br>
-                        <br>
-
-                        <input type="button" value="Submit" id="add_new_profile_btn"
-                            style="background: #2C71EC;width: 70%;border: none;font-size: 1rem;padding: 10px;color: white;border-radius: 20px;margin: 0 15% 0 15%;" />
-                        </br>
-                        </br>
-                        </br>
-                        </br>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <!----------------- END OF ADD ADMIN PROFILE ------->
-
-
-
-        <!----------------- SIDE PANEL -- EDIT ADMIN PROFILE ------------------------------------------------>
-        <div id="sidebar_modal_container_edit"
-            style="z-index: 1;width: 100%;height: calc(100% - 5rem);right:0;  box-shadow: 0 0 10px rgba(0, 0, 0, 0.35);display: none; flex-wrap: wrap;position: absolute;">
-            <div id="outer_modal" style="background: #ADADAD;opacity: 0.45;flex:auto;height: 100%;"
-                onclick="closeEditModal();">
-
-            </div>
-            <div style="right: 280px;margin:0;width: auto;position: fixed;z-index: 2;" onclick="closeEditModal();">
-                <div style="background: #4475E6;padding: 0.6rem 0.9rem;">
-                    <i class="fa-solid fa-xmark" style="color: white;font-size: 1.2rem;"></i>
-                </div>
-                <div style="background: #ADADAD;opacity: 0.45;"></div>
-            </div>
-
-            <div id="sidebar_modal_edit"
-                style="height: 100%;background: white;z-index: 2;width: 280px;display: flex;box-shadow: 0 0 10px rgba(0, 0, 0, 0.35);display: flex;flex-wrap: wrap;">
-
-                <div
-                    style="flex: auto;height: 5%;margin: 1rem 15px 0 15px;text-align: center;overflow: hidden;line-height: 1;">
-                    <p style="font-size: 1.3rem;font-weight: bold">Edit Admin Account</p>
-                </div>
-
-                <div
-                    style="flex: auto;height: calc(100% - 5rem);margin: 2rem 15px 15px 15px;text-align: center;overflow: scroll">
-
-                    <!-- FORM  -->
-                    <form method="POST" id="createForm"
-                        style="display: block;height: 100%;margin: 15px;font-weight: bold;font-size: 1rem;text-align: left;">
-
-                        <div style="display: flex;flex-wrap: wrap;width:100%;background: white;">
-                            <img id="display_edit" src="Assets/Images/hei_default_icon.png"
-                                style="box-shadow: 0px 0.873377px 3.49351px rgba(175, 175, 175, 0.25);object-fit: fit;border: none;height: 10rem;width: 10rem;background: white;border: 2px solid #C0C0C0;border-radius: 10rem;margin:auto;" />
-
-                            <label for="edit_image" class="custom-file-upload"
-                                style="color: #287BEE;border-radius: 1rem;border: 1px solid #A1A1A1;display: inline-block;padding: 6px 12px;cursor: pointer;margin: auto;margin-top: 1rem;font-weight: bold;">
-                                Upload an Image
-                            </label>
-                            <input type="file" id="edit_image" style="  display: none;" />
-
-                        </div>
-                        </br></br>
-
-                        <div style="display: flex;flex-wrap: wrap;width:100%;">
-
-                            <div style="width: 50%;">Admin ID No.</div>
-                            <input type="text" class="edit_admin_id" id="edit_admin_id" minlength="3" maxlength="50"
-                                name="edit_admin_id" value="<?php echo $last_admin_id_value;?>" value="DEFAULT_ID"
-                                style="pointer-events: none;cursor: default;border: none;width: 50%;font-size: 1.2rem;font-weight: normal;text-align: right;" />
-                        </div>
-
-                        <br>
-                        <div style="">HEI</div>
-                        <select id="edit_hei_type_selector" onchange="edit_display_selection()"
-                            style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.1rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 5px">
-                            <?php
-                            $query_get_hei = "select * from hei";
-                            $query_run = mysqli_query($connection, $query_get_hei);
-                            $return_request_from_get_hei = mysqli_num_rows($query_run);
-
-                            while($row = mysqli_fetch_array($query_run)){
-                                ?>
-                            <option value="<?php echo $row['hei_id'];?>"><?php echo $row['hei_name'];?></option>
-                            <?php
-                            }
-                            ?>
-                        </select>
-
-                        <input type="text" class="edit_associated_hei" id="edit_associated_hei" minlength="3"
-                            maxlength="50" name="edit_associated_hei" placeholder="e.g. squidew university" value=""
-                            style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.2rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 10px;display: none;" />
-                        <script>
-                        function edit_display_selection() {
-                            var select = document.getElementById('edit_hei_type_selector');
-                            var selected_option_text = select.options[select.selectedIndex].value;
-                            document.getElementById("edit_associated_hei").value = selected_option_text;
-                            console.log(selected_option_text);
-                        }
-                        </script>
-
-                        <br>
-                        <br>
-                        <div style="">First Name</div>
-                        <input type="text" class="edit_admin_fname" id="edit_admin_fname" minlength="3" maxlength="50"
-                            name="edit_admin_fname" placeholder="e.g. squidew university"
-                            style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.1rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 10px"
-                            required />
-
-                        <br>
-                        <br>
-                        <div style="">Middle Name</div>
-                        <input type="text" class="edit_admin_mname" id="edit_admin_mname" minlength="3" maxlength="50"
-                            name="edit_admin_mname" placeholder="e.g. squidew university"
-                            style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.1rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 10px"
-                            required />
-
-                        <br>
-                        <br>
-                        <div style="">Last Name</div>
-                        <input type="text" class="edit_admin_lname" id="edit_admin_lname" minlength="3" maxlength="50"
-                            name="edit_admin_lname" placeholder="e.g. squidew university"
-                            style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.1rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 10px"
-                            required />
-                        <br>
-                        <br>
-                        <div style="">Suffix</div>
-                        <input type="text" class="edit_suffix" id="edit_suffix" minlength="3" maxlength="50"
-                            name="edit_suffix" placeholder="e.g. I, II, II, JR. SR."
-                            style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.1rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 10px"
-                            required />
-                        <br>
-                        <br>
-                        <div style="">Gender</div>
-                        <select id="edit_gender_selector" onchange="add_gender_selection()"
-                            style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.1rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 5px">
-                            <option value="m">Male</option>
-                            <option value="f">Female</option>
-                        </select>
-
-                        <input type="text" class="edit_gender" id="edit_gender" minlength="3" maxlength="50"
-                            name="edit_gender" value="m"
-                            style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.2rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 10px;display: none;" />
-                        <script>
-                        function add_gender_selection() {
-                            var select = document.getElementById('edit_gender_selector');
-                            var selected_option_text = select.options[select.selectedIndex].value;
-                            document.getElementById("edit_gender").value = selected_option_text;
-                            console.log(selected_option_text);
-                            // alert(document.getElementById("hei_type").value);
-                        }
-                        </script>
-                        <br>
-                        <br>
-                        <div style="">Email</div>
-                        <input type="text" class="edit_email" id="edit_email" minlength="3" maxlength="50"
-                            name="edit_email" placeholder="e.g. carlkim@squidew.com"
-                            style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.1rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 10px"
-                            required />
-                        <br>
-                        <br>
-                        <div style="">Date Of Birth</div>
-                        <input type="date" class="edit_birthdate" id="edit_birthdate" minlength="3" maxlength="50"
-                            name="edit_birthdate" placeholder="e.g. squidew university"
-                            style="border: none;margin: 10 0 10 0;width: 100%;font-size: 0.9rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 10px;display: flex;" />
-                        <br>
-                        <div style="">Contact Number</div>
-                        <input type="text" class="edit_contact_number" id="edit_contact_number" minlength="3"
-                            maxlength="50" name="edit_contact_number" placeholder="e.g. XXXXXXXXXXX"
-                            style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.1rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 10px"
-                            required />
-                        <br>
-                        <br>
-                        <div style="">Home Address<span style="color: #267CCA"></span></div>
-                        <input type="text" class="edit_admin_location" minlength="3" maxlength="50"
-                            name="edit_admin_location" id="edit_admin_location"
-                            placeholder="e.g. 18M Dela Conception St. Pasil Cebu City"
-                            style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.1rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 10px; text-overflow: ellipsis;" />
-                        <br>
-                        <br>
-                        <hr style="margin: 1rem 0 1rem 0;color: #A1A1A1;">
-                        </hr>
-                        <br>
-                        <div style="font-size: 1.2rem;text-align: center;">Override User Access</div>
-                        <br>
-                        <br>
-                        <div style="">Username</div>
-                        <input type="text" class="edit_username" id="edit_username" minlength="6" maxlength="50"
-                            name="edit_username" placeholder="username" autocomplete="off" value=""
-                            style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.1rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 10px" />
-                        <br> <br>
-                        <div style="">Password</div>
-                        <input type="password" class="edit_password" id="edit_password" minlength="6" maxlength="50"
-                            name="edit_password" placeholder="password" autocomplete="new-password" value=""
-                            style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.1rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 10px" />
-                        <br>
-                        <br>
-                        </br>
-                        </br>
-                        <input type="button" value="Submit" id="edit_new_profile_btn"
-                            style="background: #2C71EC;width: 70%;border: none;font-size: 1rem;padding: 10px;color: white;border-radius: 20px;margin: 0 15% 0 15%;" />
-                        </br>
-                        </br>
-                        </br>
-                        </br>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <!----------------- END OF EDIT SIDE PANEL ------->
-
-
-
-
+    </div>
 </body>
+
+<script>
+function display_feedback_details(id_value, assignee_id, status, date_and_time, email, message) {
+    document.getElementById("report_bug_details_container").style.display = "block";
+    document.getElementById("empty_report_bug_preview").style.display = "none";
+
+    if (assignee_id == "0") {
+        assignee_id = "0";
+        console.log("Value is null");
+    }
+
+    //Display Data to Side Panel
+    document.getElementById("report_id_value").innerHTML = id_value;
+    document.getElementById("report_assignee_value").value = assignee_id;
+    document.getElementById("report_status_value").value = status;
+    document.getElementById("report_date_and_time").innerHTML = date_and_time;
+    document.getElementById("reporter_email").innerHTML = email;
+    document.getElementById("report_message").innerHTML = message;
+
+}
+
+function edit_feedback_details(id_value, assignee_id, status, date_and_time, email, message) {
+    document.getElementById("report_bug_details_container").style.display = "block";
+    document.getElementById("empty_report_bug_preview").style.display = "none";
+
+    console.log("Disable Clicked");
+
+    if (assignee_id == "0") {
+        assignee_id = "none";
+        console.log("Value is null");
+    }
+
+    //Display Data to Side Panel
+    document.getElementById("report_id_value").innerHTML = id_value;
+    document.getElementById("report_assignee_value").value = assignee_id;
+    document.getElementById("report_assignee_value").disabled = false;
+    document.getElementById("report_status_value").value = status;
+    document.getElementById("report_status_value").disabled = false;
+    document.getElementById("report_date_and_time").innerHTML = date_and_time;
+    document.getElementById("reporter_email").innerHTML = email;
+    document.getElementById("report_message").innerHTML = message;
+
+}
+
+function edit_admin_details(admin_id, hei_name, first_name, middle_name, last_name, contact, email, birthday,
+    account_status, username, password, suffix, address, gender, profile_image) {
+
+    openEditModal();
+
+    //Global var for Profile image deletion option
+    Edit_Firebase_Admin_image_link = profile_image;
+    console.log(Edit_Firebase_Admin_image_link);
+
+    //Edit - Pass Data to Edit Side Panel Form
+    document.getElementById("display_edit").src = profile_image;
+    document.getElementById("edit_admin_id").value = admin_id;
+
+    //Sets the Option Selected to the designated HEI
+    for (let i = 0; hei_edit_options.length; i++) {
+        console.log(hei_edit_options[i].text);
+        if (hei_edit_options[i].text == hei_name) {
+            document.getElementById("edit_hei_type_selector").value = hei_edit_options[i].value;
+            document.getElementById("edit_associated_hei").value = hei_edit_options[i].value;
+            console.log("Edit-HEI Selector Option: " + hei_edit_options[i].value);
+            console.log("Edit-HEI Input Value: " + hei_edit_options[i].value);
+            break;
+        }
+    }
+
+    document.getElementById("edit_admin_fname").value = first_name;
+    document.getElementById("edit_admin_mname").value = middle_name;
+    document.getElementById("edit_admin_lname").value = last_name;
+    document.getElementById("edit_suffix").value = suffix;
+
+    //Sets the Option Selected to the designated Gender
+    for (let k = 0; admin_gender_edit_options.length; k++) {
+        if (admin_gender_edit_options[k].value == gender) {
+            document.getElementById("edit_gender_selector").value = admin_gender_edit_options[k].value;
+            document.getElementById("edit_gender").value = admin_gender_edit_options[k].value;
+
+            break;
+
+        }
+    }
+    document.getElementById("edit_email").value = email;
+    document.getElementById("edit_birthdate").value = birthday;
+    document.getElementById("edit_contact_number").value = contact;
+    document.getElementById("edit_admin_location").value = address;
+    document.getElementById("admin_status").value = account_status;
+}
+
+function enable_editing_form() {
+    alert("Editting Enabled");
+    document.getElementById("report_status_value").disabled = false;
+    document.getElementById("report_assignee_value").disabled = false;
+}
+
+function remove_report(report_id) {
+    $.ajax({
+        url: 'Functions/PHP/delete_report_bug.php',
+        type: 'post',
+        data: {
+            report_bug_id: report_id,
+        },
+        success: function(result) {
+            console.log("Successfully Deleted Report Record.");
+            //display loader
+            $(" .report_table").load(" .report_table");
+
+        },
+        error: function(data) {
+            alert("error occured" + data); //=== Show Error Message ====//
+        }
+    });
+}
+
+function submitAdminRecord() {
+    console.log(Firebase_Admin_image_link);
+    //Add trapping
+    $.ajax({
+        url: 'Functions/PHP/add_admin.php',
+        type: 'post',
+        data: {
+            admin_profile_image: Firebase_Admin_image_link,
+            admin_associated_hei: $(".associated_hei").val(),
+            admin_fname: $(".add_admin_fname").val(),
+            admin_mname: $(".add_admin_mname").val(),
+            admin_lname: $(".add_admin_lname").val(),
+            admin_location: $(".add_admin_location").val(),
+            admin_email: $(".add_email").val(),
+            admin_contact: $(".add_contact_number").val(),
+            admin_gender: $(".add_gender").val(),
+            admin_suffix: $(".add_suffix").val(),
+            admin_birthdate: $(".add_birthdate").val(),
+
+            //Change to Generated Values
+            admin_username: "admin_sample",
+            admin_password: "admin_sample",
+            admin_account_status: "1",
+        },
+        success: function(result) {
+            closeModal();
+            console.log("Successfully Added a record.");
+            console.log($(".associated_hei").val());
+            console.log($(".add_admin_fname").val());
+            console.log($(".add_admin_mname").val());
+            console.log($(".add_admin_lname").val());
+            console.log($(".add_admin_location").val());
+            console.log($(".add_email").val());
+            console.log($(".add_contact_number").val());
+            console.log($(".add_gender").val());
+            console.log($(".add_suffix").val());
+            console.log($(".add_birthdate").val());
+            //display loader
+            document.getElementById("top_bar_loader").style.display = "none";
+            $(" .admin_table").load(" .admin_table");
+
+        },
+        error: function(data) {
+            alert("error occured" + data); //=== Show Error Message ====//
+        }
+    });
+}
+
+function submit_assignee_changes() {
+
+    $.ajax({
+        url: 'Functions/PHP/update_super_admin_in_report_bug.php',
+        type: 'post',
+        data: {
+            report_bug_id: document.getElementById("report_id_value").innerHTML + "",
+            report_assignee: document.getElementById("report_assignee_value").value,
+        },
+        success: function(result) {
+            console.log("Successfully Changed Report Assignee.");
+            //display loader
+            $(" .report_table").load(" .report_table");
+
+        },
+        error: function(data) {
+            alert("error occured" + data); //=== Show Error Message ====//
+        }
+    });
+}
+
+function submit_status_changes() {
+
+    $.ajax({
+        url: 'Functions/PHP/update_status_in_report_bug.php',
+        type: 'post',
+        data: {
+            report_bug_id: document.getElementById("report_id_value").innerHTML + "",
+            report_status: document.getElementById("report_status_value").value,
+        },
+        success: function(result) {
+            console.log("Successfully Changed Report Status.");
+            //display loader
+            $(" .report_table").load(" .report_table");
+
+        },
+        error: function(data) {
+            alert("error occured" + data); //=== Show Error Message ====//
+        }
+    });
+}
+
+function submitAdminUpdateRecord() {
+    console.log(Firebase_Admin_image_link);
+    console.log("Entered SubmitAdminUpdateRecord()");
+    //Add trapping
+    $.ajax({
+        url: 'Functions/PHP/update_admin.php',
+        type: 'post',
+        data: {
+            edit_admin_profile_image: Firebase_Admin_image_link,
+            edit_admin_id: $(".edit_admin_id").val(),
+            edit_admin_associated_hei: $(".edit_associated_hei").val(),
+            edit_admin_fname: $(".edit_admin_fname").val(),
+            edit_admin_mname: $(".edit_admin_mname").val(),
+            edit_admin_lname: $(".edit_admin_lname").val(),
+            edit_admin_location: $(".edit_admin_location").val(),
+            edit_admin_email: $(".edit_email").val(),
+            edit_admin_contact: $(".edit_contact_number").val(),
+            edit_admin_gender: $(".edit_gender").val(),
+            edit_admin_suffix: $(".edit_suffix").val(),
+            edit_admin_birthdate: $(".edit_birthdate").val(),
+            edit_admin_username: $(".edit_username").val(),
+            edit_admin_password: $(".edit_password").val(),
+            admin_account_status: "1",
+        },
+        success: function(result) {
+            closeEditModal();
+
+            //display loader
+            document.getElementById("top_bar_loader").style.display = "none";
+            $(" .admin_table").load(" .admin_table");
+            // $(".hei_details_container").load(" .hei_details_container");
+            // $(".main_data_container").load(" .main_data_container");
+            // createForm.reset();
+        },
+        error: function(data) {
+            alert("error occured" + data); //===Show Error Message====
+        }
+
+    });
+}
+
+function convertDateTimeToDate(Date_String) {
+    var s = Date_String;
+    var bits = s.split(/\D/);
+    var date = new Date(bits[0], --bits[1], bits[2], bits[3], bits[4]);
+
+    var dt_string_converted = date;
+    dt_string_converted.setMinutes(dt_string_converted.getMinutes() - dt_string_converted.getTimezoneOffset());
+
+    return dt_string_converted;
+}
+
+function convertStringToDateTimeObject(Date_String) {
+    var s = Date_String;
+    var bits = s.split(/\D/);
+    var date = new Date(bits[0], --bits[1], bits[2], bits[3], bits[4]);
+
+    var dt_string_converted = date;
+    dt_string_converted.setMinutes(dt_string_converted.getMinutes() - dt_string_converted.getTimezoneOffset());
+
+    return dt_string_converted;
+}
+
+function filterReportsResults() {
+    //Hide Empty Set Label
+    document.getElementById("empty_report_bug_preview").style.display = "none";
+
+    var input, filter, table, tr, td, i, txtValue, results_count;
+    var report_id_cb, email_cb, status_cb, assignee_cb, filter_tab;
+
+    results_count = 0;
+    input = document.getElementById("search_field");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("report_table");
+    tr = table.getElementsByTagName("tr");
+
+    report_id_cb = document.getElementById("report_id_radio");
+    email_cb = document.getElementById("report_email_radio");
+    status_cb = document.getElementById("report_status_radio");
+    assignee_cb = document.getElementById("report_assignee_radio");
+
+
+    if (report_id_cb.checked) {
+        filter_tab = "0";
+    } else if (email_cb.checked) {
+        filter_tab = "2";
+    } else if (status_cb.checked) {
+        filter_tab = "3";
+    } else if (assignee_cb.checked) {
+        filter_tab = "4";
+    }
+
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[filter_tab];
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                ++results_count;
+                console.log(results_count);
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+
+            //Updates the Result Count Line
+            document.getElementById('results_output').innerHTML = results_count + " results found.";
+        }
+
+        if (i == (tr.length - 1) && results_count == 0) {
+            // Search results were empty or no results match the admin's name
+            document.getElementById("table_empty_set_data_display").style.display = "block";
+        } else {
+            document.getElementById("table_empty_set_data_display").style.display = "none";
+        }
+    }
+}
+
+function setDeleteIDValue(del_id) {
+    remove_id = del_id;
+    console.log("Remove Admin ID: " + remove_id);
+
+    $.ajax({
+        url: 'Functions/PHP/delete_admin.php',
+        type: 'post',
+        data: {
+            admin_id: del_id,
+        },
+        success: function(result) {
+            // $("#result_display").html(result);
+            console.log("Successfully Deleted a record.");
+            // $(".body_container").load(window.location.href + " .body_container");
+            $(" .admin_table").load(" .admin_table");
+
+        }
+    });
+
+}
+</script>
 
 </html>
