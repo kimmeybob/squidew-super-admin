@@ -511,14 +511,14 @@ require 'Database Settings/database_access_credentials.php';
 
                         <input type="datetime-local" class="view_hei_start_contract" id="view_hei_start_contract"
                             name="view_hei_start_contract" disabled="disabled"
-                            style="border: none;margin: 10 0 10 0;width: 100%;font-size: 0.9rem;font-weight: normal;display: flex;" />
+                            style="border: none;margin: 10 0 10 0;width: 120%;font-size: 0.9rem;font-weight: normal;display: flex;" />
 
                         <br>
                         <div style="">End of Contract</div>
 
                         <input type="datetime-local" class="view_hei_end_contract" id="view_hei_end_contract"
                             name="view_hei_end_contract" disabled="disabled"
-                            style="border: none;margin: 10 0 10 0;width: 100%;font-size: 0.9rem;font-weight: normal;display: flex;" />
+                            style="border: none;margin: 10 0 10 0;width: 120%;font-size: 0.9rem;font-weight: normal;display: flex;" />
                         <br>
                         <br>
                     </form>
