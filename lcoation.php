@@ -9,6 +9,7 @@
 
 <body>
     <div id="location"></div>
+    HELLO
     <script>
     var div = document.getElementById("location");
 
