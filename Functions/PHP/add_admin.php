@@ -19,6 +19,10 @@ require '../../Router/Page_Links/main_links.php';
     $_POST["admin_location"],
     $_POST["admin_profile_image"]); 
 
+//Username and Password
+//Username is Email
+$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+$generated_password = substr( str_shuffle( $chars ), 0, 8 );
 
 
 // TEST ARRAY <-- Disable this 
@@ -54,9 +58,7 @@ $post_params_field_array_data_value = array();
 // echo $post_params_field_array[10]."<br>";
 // echo $post_params_field_array[11]."<br>";
 
-$query_push_new_hei_profile = "insert into admin (first_name,middle_name,last_name,email,contact_number,birthdate,username,password,account_status, hei_id, suffix, sex, home_address, profile_image) value ('".$post_params_field_array[0]."','".$post_params_field_array[1]."','".$post_params_field_array[2]."','".$post_params_field_array[3]."','".$post_params_field_array[4]."','".$post_params_field_array[5]."','".$post_params_field_array[6]."','".$post_params_field_array[7]."','".$post_params_field_array[8]."',(select hei_id from hei where hei_id= '".$post_params_field_array[9]."'),'".$post_params_field_array[10]."','".$post_params_field_array[11]."','".$post_params_field_array[12]."','".$post_params_field_array[13]."')";
+$query_push_new_hei_profile = "insert into admin (first_name,middle_name,last_name,email,contact_number,birthdate,username,password,account_status, hei_id, suffix, sex, home_address, profile_image) value ('".$post_params_field_array[0]."','".$post_params_field_array[1]."','".$post_params_field_array[2]."','".$post_params_field_array[3]."','".$post_params_field_array[4]."','".$post_params_field_array[5]."','".$post_params_field_array[3]."','".$generated_password."','".$post_params_field_array[8]."',(select hei_id from hei where hei_id= '".$post_params_field_array[9]."'),'".$post_params_field_array[10]."','".$post_params_field_array[11]."','".$post_params_field_array[12]."','".$post_params_field_array[13]."')";
 $query_run = mysqli_query($connection, $query_push_new_hei_profile);
-
-
 
 ?>
