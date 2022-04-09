@@ -508,25 +508,27 @@ require 'Database Settings/database_access_credentials.php';
                             required />
                         <br>
                         <br>
-                        <div style="">Gender</div>
-                        <select id="add_gender_selector" onchange="add_gender_selection()"
+
+                        <div>Gender</div>
+                        <select id="add_gender_selector" onchange="add_gender_selections()"
                             style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.1rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 5px">
                             <option value="m">Male</option>
                             <option value="f">Female</option>
                         </select>
 
                         <input type="text" class="add_gender" id="add_gender" minlength="3" maxlength="50"
-                            name="add_gender" value="m"
+                            name="add_gender"
                             style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.2rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 10px;display: none;" />
                         <script>
-                        function add_gender_selection() {
+                        function add_gender_selections() {
                             var select = document.getElementById('add_gender_selector');
                             var selected_option_text = select.options[select.selectedIndex].value;
                             document.getElementById("add_gender").value = selected_option_text;
                             console.log(selected_option_text);
-                            // alert(document.getElementById("hei_type").value);
+                            //alert(document.getElementById("add_gender").value);
                         }
                         </script>
+
                         <br>
                         <br>
                         <div style="">Email</div>
@@ -697,6 +699,7 @@ require 'Database Settings/database_access_credentials.php';
                             var selected_option_text = select.options[select.selectedIndex].value;
                             document.getElementById("edit_gender").value = selected_option_text;
                             console.log(selected_option_text);
+
                             // alert(document.getElementById("hei_type").value);
                         }
                         </script>

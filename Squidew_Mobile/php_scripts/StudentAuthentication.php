@@ -3,10 +3,17 @@
 $user = $_POST["user"];
 $password = $_POST["password"];
 
-        $server_name = "localhost";
-        $db_username = "root";
-        $db_password = "";
-        $db_name = "squidew";
+//Test Case
+// $user = "18000001";
+// $password = "usjrstudent_jamar";
+
+        
+        // $server_name = "localhost";
+        // $db_username = "root";
+        // $db_password = "";
+        // $db_name = "squidew";
+
+        require '../../Database Settings/database_access_credentials.php';
 
         //Connections: You can use '$connection' or '$conn' the later is shorter.
         $connection = mysqli_connect($server_name, $db_username, $db_password);
@@ -33,7 +40,14 @@ $password = $_POST["password"];
                 }
                 
                 //echo 'true';
-                $query_fetch_user_data = "select * from student inner join students_profile on students_profile.student_id = student.student_id inner join hei on hei.hei_id = student.hei_id inner join degree on degree.degree_id = student.degree_id inner join profile_image on profile_image.student_id = student.student_id inner join wallet on wallet.student_id = student.student_id where students_profile.student_id = '".$Student_Logged_ID."';";
+                $query_fetch_user_data = "select * from student 
+                inner join students_profile on students_profile.student_id = student.student_id 
+                inner join hei on hei.hei_id = student.hei_id 
+                inner join degree on degree.degree_id = student.degree_id 
+                inner join profile_image on profile_image.student_id = student.student_id 
+                inner join linked_card on linked_card.student_id = student.student_id
+                inner join wallet on wallet.wallet_id = linked_card.wallet_id where students_profile.student_id = '".$Student_Logged_ID."' and wallet.wallet_name = 'SQUIDEW Wallet';";
+                
                 $run_query_fetch_user_data = mysqli_query($connection, $query_fetch_user_data);
                 
                 while($sub_row = mysqli_fetch_assoc($run_query_fetch_user_data)){

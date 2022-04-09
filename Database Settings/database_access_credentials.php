@@ -11,9 +11,9 @@
         $dbconfig = mysqli_select_db($connection,$db_name);
 
         if($dbconfig){
-            // echo 'Connected to Database';
+             //echo 'Connected to Database';
         }else{
-            // echo 'Unable to connect to database;';
+             //echo 'Unable to connect to database;';
         }
 
 ?>
