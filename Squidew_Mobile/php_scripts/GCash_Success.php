@@ -1,6 +1,6 @@
 <?php
 
-$transaction_id = $_GET["transaction_id"];
+$transaction_id = $_POST["transaction_id"];
 
 //Test Data
 //$transaction_id = "44";

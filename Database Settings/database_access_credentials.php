@@ -4,6 +4,9 @@
         $db_password = "";
         $db_name = "squidew";
 
+        //Domain / Localhost IP
+        $domain_link = "192.168.254.101";
+
         //Connections: You can use '$connection' or '$conn' the later is shorter.
         $connection = mysqli_connect($server_name, $db_username, $db_password);
         $conn = mysqli_connect($server_name, $db_username, $db_password);

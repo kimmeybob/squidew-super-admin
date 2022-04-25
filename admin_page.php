@@ -115,7 +115,7 @@ require 'Database Settings/database_access_credentials.php';
                         }else if($row['admin_account_status'] == 1){
                             $admin_status = "Active";
                         }else{
-                            $admin_status = "On Leave";
+                            $admin_status = "Terminated";
                         }
                         ?>
                     <tr class="admin_data_row" id="admin_data_row" style="font-size: 0.9rem;"

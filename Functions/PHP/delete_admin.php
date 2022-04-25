@@ -5,7 +5,8 @@ require '../../Router/Page_Links/main_links.php';
 
 $delete_admin_id = $_POST['admin_id'];
 
-$query = "delete from admin where admin_id = $delete_admin_id";
+//$query = "delete from admin where admin_id = $delete_admin_id";
+$query = "update admin set account_status = '2' where admin_id = $delete_admin_id";
 $query_run = mysqli_query($connection,$query);
 
 

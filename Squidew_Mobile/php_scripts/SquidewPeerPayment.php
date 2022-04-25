@@ -96,7 +96,7 @@ if($query_response){
             
             //Create Transaction and Peer Transaction Records
             $current_date_and_time = date("Y-m-d h:m:s");
-            $create_peer_transaction_query = "insert into transaction (transaction_amount, transaction_date, transaction_status, transaction_type) values (".$total_amount.",'".$current_date_and_time."','0','0');";
+            $create_peer_transaction_query = "insert into transaction (transaction_amount, transaction_date, transaction_status, transaction_type) values (".$total_amount.",'".$current_date_and_time."','1','0');";
             
             //return Obj
             $returnObj->date_and_time = $current_date_and_time;
@@ -111,7 +111,9 @@ if($query_response){
               $run_create_new_peer_transaction_query = mysqli_query($connection, $create_peer_transaction_query);
               
               //Response and Result
-              print(json_encode($returnObj));
+              //print(json_encode($returnObj));
+
+              print($last_id);
 
             }else{
               echo 'false';

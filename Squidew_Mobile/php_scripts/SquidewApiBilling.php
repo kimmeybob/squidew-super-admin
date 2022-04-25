@@ -19,6 +19,8 @@ require '../../Database Settings/database_access_credentials.php';
 
 //Fetch Student Necessary Data
 
+$transaction_id = 0;
+
 $fetch_student_data_query = "select * from student
 inner join hei on hei.hei_id = student.hei_id
 inner join student_account_statement on student_account_statement.student_id = student.student_id
@@ -61,12 +63,17 @@ if($query_response){
 }
 
 function createTransactionAndBillingTransaction($total_amount, $fee_amount, $bills_student_id, $connection){
+    global $transaction_id;
   
     $current_date_and_time = date("Y-m-d h:m:s");
-    $create_billing_transaction_query = "insert into transaction (transaction_amount, transaction_date, transaction_status, transaction_type) values (".$total_amount.",'".$current_date_and_time."','0','0');";
+    $create_billing_transaction_query = "insert into transaction (transaction_amount, transaction_date, transaction_status, transaction_type) values (".$total_amount.",'".$current_date_and_time."','4','0');";
   
     if(mysqli_query($connection,$create_billing_transaction_query)){
       $last_id = mysqli_insert_id($connection);
+
+      //Transaction Return ID
+      $transaction_id = $last_id;
+
       $create_bills_transaction_query = "insert into bills_transaction (transaction_id,sender_id) values ('".$last_id."','".$bills_student_id."');";    
       $run_create_new_bills_transaction_query = mysqli_query($connection, $create_bills_transaction_query);
     }else{
@@ -94,10 +101,12 @@ function deductStudentAccountBalance($student_id, $total_amount,$current_bill_ba
 }
 
 function deductWalletBalance($student_wallet_id, $total_amount_deductable_no_fee, $student_wallet_balance, $connection){
+    global $transaction_id;
+    
     $new_wallet_balance = bcsub($student_wallet_balance, $total_amount_deductable_no_fee, 2);
     $query_deduct_wallet_balance = "update wallet set wallet_balance = ".$new_wallet_balance." where wallet_id=".$student_wallet_id.";";
     $run_query_deduct_wallet_balance = mysqli_query($connection, $query_deduct_wallet_balance);
-    echo 'success';
+    echo $transaction_id;
 }
 
 

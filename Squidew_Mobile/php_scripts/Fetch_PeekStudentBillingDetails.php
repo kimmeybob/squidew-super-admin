@@ -1,9 +1,9 @@
 <?php
 
-//$student_id = $_POST["student_id"];
+$student_id = $_POST["student_id"];
 
 //Test Data
- $student_id = "18000022";
+//$student_id = "18000022";
 
 require '../../Database Settings/database_access_credentials.php';
 

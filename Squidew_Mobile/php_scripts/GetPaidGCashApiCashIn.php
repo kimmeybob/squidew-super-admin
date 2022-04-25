@@ -3,14 +3,14 @@
 
 $student_id = $_POST["student_id"];
 $description = $_POST["description"];
-$total_amount = $_POST["total_amount"];
+//$total_amount = $_POST["total_amount"];
 $fee_amount = $_POST["fee_amount"];
 
 
 //Test Data
 //$student_id = "18000021";
 //$description = "Billing";
-//$total_amount = "1.00";
+$total_amount = "1.00";
 //$fee_amount = "0";
 
 
@@ -46,30 +46,30 @@ if($query_response){
         $student_mobile = $row['contact_number'];
         $hei_name = $row['hei_name'];
     }
-    creatBillingTransaction($domain_link,$total_amount, $fee_amount, $student_id,$connection, $student_name,$student_email,$student_mobile,$student_id,$description,$total_amount,$fee_amount,$hei_name);
+    creatCashinTransaction($domain_link,$total_amount, $fee_amount, $student_id,$connection, $student_name,$student_email,$student_mobile,$student_id,$description,$total_amount,$fee_amount,$hei_name);
     
 }else{
     
 }
 
-function creatBillingTransaction($domain_link,$bills_total_amount, $bills_fee_amount, $bills_student_id, $connection, $student_name,$student_email,$student_mobile,$student_id,$description,$total_amount,$fee_amount,$hei_name){
+function creatCashinTransaction($domain_link,$bills_total_amount, $bills_fee_amount, $bills_student_id, $connection, $student_name,$student_email,$student_mobile,$student_id,$description,$total_amount,$fee_amount,$hei_name){
   global $returnObj;
   global $squidew_transaction_id;
 
   $sum_total_amount = bcadd($bills_total_amount, $bills_fee_amount, 2);
   
   $current_date_and_time = date("Y-m-d h:m:s");
-  $create_billing_transaction_query = "insert into transaction (transaction_amount, transaction_date, transaction_status, transaction_type) values (".$sum_total_amount.",'".$current_date_and_time."','0','1');";
+  $create_cash_in_transaction_query = "insert into transaction (transaction_amount, transaction_date, transaction_status, transaction_type) values (".$sum_total_amount.",'".$current_date_and_time."','0','5');";
 
-  if(mysqli_query($connection,$create_billing_transaction_query)){
+  if(mysqli_query($connection,$create_cash_in_transaction_query)){
     $last_id = mysqli_insert_id($connection);
-    $create_bills_transaction_query = "insert into bills_transaction (transaction_id,sender_id) values ('".$last_id."','".$bills_student_id."');";
+    $create_cash_in_transaction_query = "insert into credits_transaction (transaction_id,sender_id) values ('".$last_id."','".$bills_student_id."');";
 
     //Transaction ID
     $returnObj->transaction_id = $last_id.'';
     $squidew_transaction_id = $last_id;
 
-    if(mysqli_query($connection, $create_bills_transaction_query)){
+    if(mysqli_query($connection, $create_cash_in_transaction_query)){
       GENERATE_API_LINK($last_id,$domain_link,$student_name,$student_email,$student_mobile,$student_id,$description,$total_amount,$fee_amount,$hei_name);
     }else{
       echo 'false'; 
