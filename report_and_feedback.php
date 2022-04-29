@@ -82,9 +82,8 @@ require 'Database Settings/database_access_credentials.php';
                     <tr style="background: #0E203F; color: white;text-align: center;font-size: 0.9rem">
                         <th>Report ID</th>
                         <th>Date & Time</th>
+                        <th>Report Subject</th>
                         <th>Reporter's Email</th>
-
-                        <!-- <th>DOB</th> -->
                         <th>Status</th>
 
                         <th>Assignee</th>
@@ -116,9 +115,10 @@ require 'Database Settings/database_access_credentials.php';
 
 
                     <tr class="edit_data_row" id="edit_data_row" style="font-size: 0.9rem;"
-                        onclick="display_feedback_details('<?php echo $row['report_id'];?>','<?php echo $row['super_admin_id'];?>','<?php echo $row['status'];?>','<?php echo $row['report_time'];?>','<?php echo $row['email'];?>','<?php echo $row['report_message'];?>');">
+                        onclick="display_feedback_details('<?php echo $row['report_id'];?>','<?php echo $row['super_admin_id'];?>','<?php echo $row['status'];?>','<?php echo $row['report_time'];?>','<?php echo $row['email'];?>','<?php echo $row['report_message'];?>','<?php echo $row['report_title'];?>');">
                         <td><?php echo $row['report_id'];?></td>
                         <td><?php echo $row['report_time'];?></td>
+                        <th><?php echo $row['report_title'];?></th>
                         <td><?php echo $row['email'];?></td>
                         <?php
                         
@@ -156,10 +156,10 @@ require 'Database Settings/database_access_credentials.php';
                                 <div class="dropdown-content">
                                     <a style="color: grey;font-size: 0.8rem;pointer-events: none;">Options</a>
                                     <!-- View  -->
-                                    <a onclick="display_feedback_details('<?php echo $row['report_id'];?>','<?php echo $row['super_admin_id'];?>','<?php echo $row['status'];?>','<?php echo $row['report_time'];?>','<?php echo $row['email'];?>','<?php echo $row['report_message'];?>');"
+                                    <a onclick="display_feedback_details('<?php echo $row['report_id'];?>','<?php echo $row['super_admin_id'];?>','<?php echo $row['status'];?>','<?php echo $row['report_time'];?>','<?php echo $row['email'];?>','<?php echo $row['report_message'];?>','<?php echo $row['report_title'];?>');"
                                         style="color: #287BEE;cursor: default;">View</a>
                                     <!-- Edit -->
-                                    <a onclick="edit_feedback_details('<?php echo $row['report_id'];?>','<?php echo $row['super_admin_id'];?>','<?php echo $row['status'];?>','<?php echo $row['report_time'];?>','<?php echo $row['email'];?>','<?php echo $row['report_message'];?>')"
+                                    <a onclick="edit_feedback_details('<?php echo $row['report_id'];?>','<?php echo $row['super_admin_id'];?>','<?php echo $row['status'];?>','<?php echo $row['report_time'];?>','<?php echo $row['email'];?>','<?php echo $row['report_message'];?>','<?php echo $row['report_title'];?>')"
                                         ; style="cursor: default;">Edit</a>
                                     <!-- Remove -->
                                     <a onclick="remove_report('<?php echo $row['report_id'];?>')"
@@ -311,6 +311,20 @@ require 'Database Settings/database_access_credentials.php';
                         </div>
                     </div>
 
+                    <!-- REPORT SUBJECT TITLE DETAILS -->
+                    <div
+                        style="margin: 1rem 1.2rem 2% 1.2rem;font-size: 1rem;font-weight: normal;text-align: center;display: flex;flex-wrap: wrap;">
+                        <div style="flex: 100%;text-align: left;font-weight: bold;">
+                            Report Subject:
+                        </div>
+                        <br>
+                        <br>
+                        <div class="report_subject" id="report_subject"
+                            style="flex: auto;flex-wrap: wrap;text-align: left;;background:#F1F2F2;border: 0.1rem solid black;padding: 0.5rem">
+                            REPORT TITLE/SUBJECT
+                        </div>
+                    </div>
+
                     <!-- REPORTER MESSAGE DETAILS -->
                     <div
                         style="margin: 1rem 1.2rem 2% 1.2rem;font-size: 1rem;font-weight: normal;text-align: center;display: flex;flex-wrap: wrap;">
@@ -336,6 +350,8 @@ require 'Database Settings/database_access_credentials.php';
                         <br>
                         <br>
                     </div>
+                    <br>
+                    <br>
                 </div>
             </div>
         </div>
@@ -344,7 +360,7 @@ require 'Database Settings/database_access_credentials.php';
 </body>
 
 <script>
-function display_feedback_details(id_value, assignee_id, status, date_and_time, email, message) {
+function display_feedback_details(id_value, assignee_id, status, date_and_time, email, message, title) {
     document.getElementById("report_bug_details_container").style.display = "block";
     document.getElementById("empty_report_bug_preview").style.display = "none";
 
@@ -360,10 +376,11 @@ function display_feedback_details(id_value, assignee_id, status, date_and_time, 
     document.getElementById("report_date_and_time").innerHTML = date_and_time;
     document.getElementById("reporter_email").innerHTML = email;
     document.getElementById("report_message").innerHTML = message;
+    document.getElementById("report_subject").innerHTML = title;
 
 }
 
-function edit_feedback_details(id_value, assignee_id, status, date_and_time, email, message) {
+function edit_feedback_details(id_value, assignee_id, status, date_and_time, email, message, title) {
     document.getElementById("report_bug_details_container").style.display = "block";
     document.getElementById("empty_report_bug_preview").style.display = "none";
 
@@ -383,6 +400,7 @@ function edit_feedback_details(id_value, assignee_id, status, date_and_time, ema
     document.getElementById("report_date_and_time").innerHTML = date_and_time;
     document.getElementById("reporter_email").innerHTML = email;
     document.getElementById("report_message").innerHTML = message;
+    document.getElementById("report_subject").innerHTML = title;
 
 }
 
