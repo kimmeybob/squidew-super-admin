@@ -38,8 +38,20 @@ require 'Database Settings/database_access_credentials.php';
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <title>SQUIDEW Dashboard</title>
+<style>
+td,th {
+  text-align: left;
+  padding: 8px;
+}
 
+th {
+  position: sticky;
+  background-color: #0E203F;
+  z-index: 1;
+  top: -1;
+}
 
+</style>
 </head>
 
 <body>
@@ -88,8 +100,7 @@ require 'Database Settings/database_access_credentials.php';
                     </div>
                     <div style="flex: 73%;background: white;display: flex;flex-wrap: wrap;">
                         <p
-                            style="margin: auto;text-align: center;color: #4474E5;font-weight: bold;text-align:left;margin-left: 20px;font-size: 0.9rem;">
-                            Total
+                            style="margin: auto;text-align: center;color: #4474E5;font-weight: bold;text-align:left;margin-left: 20px;;font-size: 1.2rem;">
                             HEI Partners</p>
                     </div>
                 </div>
@@ -112,8 +123,7 @@ require 'Database Settings/database_access_credentials.php';
                     </div>
                     <div style="flex: 75%;background: white;display: flex;flex-wrap: wrap;">
                         <p
-                            style="margin: auto;color: #4474E5;font-weight: bold;text-align:left;margin-left: 20px;font-size: 0.9rem;;">
-                            Total
+                            style="margin: auto;color: #4474E5;font-weight: bold;text-align:center;margin-left: 20px;font-size: 1.2rem;;">
                             Admins</p>
                     </div>
                 </div>
@@ -135,7 +145,7 @@ require 'Database Settings/database_access_credentials.php';
                     </div>
                     <div style="flex: 75%;background: white;display: flex;flex-wrap: wrap;">
                         <p
-                            style="margin: auto;text-align: center;color: #4474E5;font-weight: bold;text-align:left;margin-left: 20px;font-size: 0.9rem;;">
+                            style="margin: auto;text-align: center;color: #4474E5;font-weight: bold;text-align:left;margin-left: 20px;font-size: 1.2rem;;">
                             Reports</p>
                     </div>
                 </div>
@@ -160,80 +170,81 @@ require 'Database Settings/database_access_credentials.php';
                 </div>
 
                 <!-- Table -->
-
-                <table style="width:100%">
-                    <?php
-                
-                $query = "select * from hei";
-                $run_query = mysqli_query($connection,$query);
-                $return_request_from_run_query = mysqli_num_rows($run_query) > 0;
-                ?>
-
-                    <tr style="background: #0E203F; color: white;text-align: center;">
-                        <th>HEI ID</th>
-                        <th>Status</th>
-                        <th style="text-align: left;">HEI Name</th>
-                        <th>Type</th>
-                        <th>SOC</th>
-                        <th>EOC</th>
-                        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </th>
-                    </tr>
-
-                    <?php
-                    while($row = mysqli_fetch_array($run_query)){
-                        ?>
-
-                    <tr>
-                        <td onclick="">
-                            <?php echo $row['hei_id'];?></td>
+                <div style="overflow:hidden; overflow-y: scroll;overflow-x: scroll;min-height: auto;max-height: 75%;">
+                    <table style="width:123%">
                         <?php
-                            //Color Selectors depending on Status
-                            $color_selected = "#3DBC73";
-                            $status_value = "Active";
+                    
+                    $query = "select * from hei";
+                    $run_query = mysqli_query($connection,$query);
+                    $return_request_from_run_query = mysqli_num_rows($run_query) > 0;
+                    ?>
 
-                            if($row['status'] == "1"){
-                                $status_value = "Active";
-                                $color_selected = "#3DBC73";
-                            }else if($row['status'] == "2"){
-                                $status_value = "Offline";
-                                $color_selected = "#EF575D";
-                            }else if($row['status'] == "0"){
-                                $status_value = "Pending";
-                                $color_selected = "#F49B45";
-                            }
+                        <tr style="background: #0E203F; color: white;text-align: center;">
+                            <th>HEI ID</th>
+                            <th>Status</th>
+                            <th style="text-align: left;">HEI Name</th>
+                            <th>Type</th>
+                            <th>SOC</th>
+                            <th>EOC</th>
+                            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </th>
+                        </tr>
+
+                        <?php
+                        while($row = mysqli_fetch_array($run_query)){
                             ?>
-                        <td style="color: <?php echo $color_selected;?>;font-weight: bold;"><?php echo $status_value;
-                        ?></td>
-                        <td style="text-align: left;"><?php echo $row['hei_name'];?></td>
-                        <td style="text-align: center;"><?php echo $row['hei_type'];?></td>
-                        <td><?php echo $row['start'];?></td>
-                        <td><?php echo $row['end'];?></td>
-                        <td onclick="">
-                            <div class="dropdown" style="margin: auto;">
-                                <button class="dropdown"
-                                    style="margin: auto;background: white;width: 25px;height: 25px;border-radius: 25px;border: 1px solid #A1A1A1;box-shadow: 0 0 1px rgba(0, 0, 0, 0.35)">
-                                    ...
-                                </button>
 
-                                <div class="dropdown-content">
-                                    <a style="color: grey;font-size: 0.8rem;pointer-events: none;">Options</a>
-                                    <a class="view_btn" style="cursor: default;"
-                                        onclick="openViewModal('<?php echo $row['hei_id'];?>','<?php echo $row['hei_name'];?>','<?php echo $row['hei_type'];?>','<?php echo $row['status'];?>','<?php echo $row['start'];?>','<?php echo $row['end'];?>','<?php echo $row['company_email'];?>','<?php echo $row['contact_number'];?>','<?php echo $row['address'];?>','<?php echo $row['profile_image'];?>')">View</a>
-                                    <a class="edit_btn"
-                                        onclick="openEditModal('<?php echo $row['hei_id'];?>','<?php echo $row['hei_name'];?>','<?php echo $row['hei_type'];?>','<?php echo $row['status'];?>','<?php echo $row['start'];?>','<?php echo $row['end'];?>','<?php echo $row['company_email'];?>','<?php echo $row['contact_number'];?>','<?php echo $row['address'];?>','<?php echo $row['profile_image'];?>')"
-                                        style="cursor: default;">Edit</a>
-                                    <a class="remove_btn" id="remove_btn"
-                                        onclick="setDeleteIDValue('<?php echo $row['hei_id']?>');"
-                                        style="color: #EF575C;cursor: default;">Remove</a>
+                        <tr>
+                            <td onclick="">
+                                <?php echo $row['hei_id'];?></td>
+                            <?php
+                                //Color Selectors depending on Status
+                                $color_selected = "#3DBC73";
+                                $status_value = "Active";
+
+                                if($row['status'] == "1"){
+                                    $status_value = "Active";
+                                    $color_selected = "#3DBC73";
+                                }else if($row['status'] == "2"){
+                                    $status_value = "Offline";
+                                    $color_selected = "#EF575D";
+                                }else if($row['status'] == "0"){
+                                    $status_value = "Pending";
+                                    $color_selected = "#F49B45";
+                                }
+                                ?>
+                            <td style="color: <?php echo $color_selected;?>;font-weight: bold;"><?php echo $status_value;
+                            ?></td>
+                            <td style="text-align: left;"><?php echo $row['hei_name'];?></td>
+                            <td style="text-align: center;"><?php echo $row['hei_type'];?></td>
+                            <td><?php echo $row['start'];?></td>
+                            <td><?php echo $row['end'];?></td>
+                            <td onclick="">
+                                <div class="dropdown" style="margin: auto;">
+                                    <!-- <button class="dropdown"
+                                        style="margin: auto;background: white;width: 25px;height: 25px;border-radius: 25px;border: 1px solid #A1A1A1;box-shadow: 0 0 1px rgba(0, 0, 0, 0.35)">
+                                        ...
+                                    </button> -->
+
+                                    <div class="dropdown-content">
+                                        <a style="color: grey;font-size: 0.8rem;pointer-events: none;">Options</a>
+                                        <a class="view_btn" style="cursor: default;"
+                                            onclick="openViewModal('<?php echo $row['hei_id'];?>','<?php echo $row['hei_name'];?>','<?php echo $row['hei_type'];?>','<?php echo $row['status'];?>','<?php echo $row['start'];?>','<?php echo $row['end'];?>','<?php echo $row['company_email'];?>','<?php echo $row['contact_number'];?>','<?php echo $row['address'];?>','<?php echo $row['profile_image'];?>')">View</a>
+                                        <a class="edit_btn"
+                                            onclick="openEditModal('<?php echo $row['hei_id'];?>','<?php echo $row['hei_name'];?>','<?php echo $row['hei_type'];?>','<?php echo $row['status'];?>','<?php echo $row['start'];?>','<?php echo $row['end'];?>','<?php echo $row['company_email'];?>','<?php echo $row['contact_number'];?>','<?php echo $row['address'];?>','<?php echo $row['profile_image'];?>')"
+                                            style="cursor: default;">Edit</a>
+                                        <a class="remove_btn" id="remove_btn"
+                                            onclick="setDeleteIDValue('<?php echo $row['hei_id']?>');"
+                                            style="color: #EF575C;cursor: default;">Remove</a>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <?php
-                }
-                ?>
+                            </td>
+                        </tr>
+                        <?php
+                    }
+                    ?>
 
-                </table>
+                    </table>
+                </div>
             </div>
         </div>
         <!-- END of Main Content Container -->
@@ -443,7 +454,6 @@ require 'Database Settings/database_access_credentials.php';
                         <div style="display: flex;flex-wrap: wrap;width:100%;background: white;">
                             <img id="view_display"
                                 style="box-shadow: 0px 0.873377px 3.49351px rgba(175, 175, 175, 0.25);object-fit: fit;border: none;height: 10rem;width: 10rem;background: white;border: 2px solid #C0C0C0;border-radius: 10rem;margin:auto;" />
-
                         </div>
 
                         <br>
@@ -545,24 +555,39 @@ require 'Database Settings/database_access_credentials.php';
             </div>
 
             <div id="sidebar_modal_edit"
-                style="background: white;height: 100%;z-index: 2;width: 280px;display: flex;box-shadow: 0 0 10px rgba(0, 0, 0, 0.35);display: flex;flex-wrap: wrap;overflow: scroll;">
+                style="background: white;height: 100%;z-index: 2;width: 280px;display: flex;box-shadow: 0 0 10px rgba(0, 0, 0, 0.35);display: flex;flex-wrap: wrap;overflow-y: scroll;">
 
                 <div
                     style="flex: auto;height: 5%;margin: 1rem 15px 0 15px;text-align: center;overflow: hidden;line-height: 1;">
                     <p style="font-size: 1.3rem;font-weight: bold">Edit HEI Profile</p>
                 </div>
 
-                <div style="flex: auto;height: 100%;margin: 2rem 15px 15px 15px;text-align: center;overflow: hidden">
+                <div style="flex: auto;height: 100%;margin: 2rem 15px 15px 15px;text-align: center;">
 
                     <!-- FORM  -->
                     <form method="POST"
                         style="display: block;height: 100%;margin: 15px;font-weight: bold;font-size: 1rem;text-align: left;">
 
 
+                        <div style="display: flex;flex-wrap: wrap;width:100%;background: white;">
+                            <img id="display_edit" src="Assets/Images/hei_default_icon.png"
+                                style="box-shadow: 0px 0.873377px 3.49351px rgba(175, 175, 175, 0.25);object-fit: fit;border: none;height: 10rem;width: 10rem;background: white;border: 2px solid #C0C0C0;border-radius: 10rem;margin:auto;" />
+
+                            <label for="edit_image" class="custom-file-upload"
+                                style="color: #287BEE;border-radius: 1rem;border: 1px solid #A1A1A1;display: inline-block;padding: 6px 12px;cursor: pointer;margin: auto;margin-top: 1rem;font-weight: bold;">
+                                Upload an Image
+                            </label>
+                            <input type="file" id="edit_image" style="  display: none;" />
+
+                        </div>
+
+                        <br>
+                        <br>
+
+
                         <div style="display: flex;flex-wrap: wrap;width:100%;">
 
                             <div style="width: 50%;">HEI ID No.</div>
-
 
                             <input type="text" class="edit_hei_id" id="edit_hei_id" minlength="3" maxlength="50"
                                 name="edit_hei_id" value="default_ID" value="DEFAULT_ID"
@@ -659,13 +684,16 @@ require 'Database Settings/database_access_credentials.php';
                             style="border: none;margin: 10 0 10 0;width: 100%;font-size: 0.9rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 10px;display: flex;" />
                         <br>
                         <br>
+
                         <input type="button" value="submit" id="edit_profile_btn"
                             style="background: #2C71EC;width: 70%;border: none;font-size: 1rem;padding: 10px;color: white;border-radius: 20px;margin: 0 15% 15%;" />
-
-                    </form>
-
-                </div>
+                            </br>
                 </br>
+                </br>
+                </br>
+                    </form>
+                </div>
+
             </div>
         </div>
         <!----------------- END OF SIDE PANEL -- EDIT HEI PROFILE ------->
@@ -680,36 +708,9 @@ let remove_id = 0;
 var Firebase_HEI_image_link =
     "https://firebasestorage.googleapis.com/v0/b/squidew-8401a.appspot.com/o/hei_images%2Fdefault.png?alt=media&token=e13c3f43-6d9d-494a-91f9-48ad1bf6cc70";
 
-$(document).ready(function() {
-    //Add HEI Profile Form Button
-    // $("#add_new_profile_btn").click();
+var Firebase_EDIT_HEI_image_link = "";
 
-    //Add HEI Profile Form Button
-    $("#edit_profile_btn").click(function() {
-        //Add trapping
-        $.ajax({
-            url: 'Functions/PHP/update_hei_form.php',
-            type: 'post',
-            data: {
-                edit_hei_id: $(".edit_hei_id").val(),
-                edit_hei_name: $(".edit_hei_name").val(),
-                edit_hei_location: $(".edit_hei_location").val(),
-                edit_hei_email: $(".edit_hei_email").val(),
-                edit_hei_contact: $(".edit_hei_contact").val(),
-                edit_hei_type: $(".edit_hei_type").val(),
-                edit_hei_status: $(".edit_hei_status").val(),
-                edit_hei_start: $(".edit_hei_start_contract").val(),
-                edit_hei_end: $(".edit_hei_end_contract").val(),
-            },
-            success: function(result) {
-                closeEditModal();
-                console.log(result + " ||");
-                console.log("Successfully Update a record.");
-                $(".hei_details_container").load(" .hei_details_container");
-                $(".main_data_container").load(" .main_data_container");
-            }
-        });
-    });
+$(document).ready(function() {
 
     $("#remove_btn").click(function() {
         //Add trapping
@@ -730,6 +731,39 @@ $(document).ready(function() {
         });
     });
 });
+
+function submitEditHEIRecord(){
+
+//Add trapping
+$.ajax({
+            url: 'Functions/PHP/update_hei_form.php',
+            type: 'post',
+            data: {
+                edit_hei_id: $(".edit_hei_id").val(),
+                edit_hei_profile: Firebase_EDIT_HEI_image_link,
+                edit_hei_name: $(".edit_hei_name").val(),
+                edit_hei_location: $(".edit_hei_location").val(),
+                edit_hei_email: $(".edit_hei_email").val(),
+                edit_hei_contact: $(".edit_hei_contact").val(),
+                edit_hei_type: $(".edit_hei_type").val(),
+                edit_hei_status: $(".edit_hei_status").val(),
+                edit_hei_start: $(".edit_hei_start_contract").val(),
+                edit_hei_end: $(".edit_hei_end_contract").val(),
+            },
+            success: function(result) {
+                closeEditModal();
+                console.log(result + " ||");
+                console.log("Successfully Update a record.");
+
+                //display loader
+                document.getElementById("top_bar_loader").style.display = "none";
+                $(".hei_details_container").load(" .hei_details_container");
+                $(".main_data_container").load(" .main_data_container");
+
+            }
+        });
+
+}
 </script>
 <script>
 function submitHEIRecord() {
@@ -796,9 +830,11 @@ function setDeleteIDValue(del_id) {
 }
 
 //Modal for Edit HEI Profile
-function openEditModal(HEI_ID, HEI_Name, HEI_Type, Status, Start, End, Email, ContactNumber, Address) {
+function openEditModal(HEI_ID, HEI_Name, HEI_Type, Status, Start, End, Email, ContactNumber, Address, HEI_Profile) {
+    Firebase_EDIT_HEI_image_link = HEI_Profile;
     console.log("HEI ID: " + HEI_ID);
     console.log("HEI Name: " + HEI_Name);
+    console.log("HEI Profile Image: " + HEI_Profile);
     console.log("HEI Type: " + HEI_Type);
     console.log("HEI Status: " + Status);
     console.log("HEI Contract Start: " + Start);
@@ -812,6 +848,7 @@ function openEditModal(HEI_ID, HEI_Name, HEI_Type, Status, Start, End, Email, Co
     document.getElementById("edit_hei_contact").value = ContactNumber;
     document.getElementById("edit_hei_email").value = Email;
     document.getElementById("edit_hei_type").value = HEI_Type;
+    document.getElementById("display_edit").src = HEI_Profile;
 
     if (Status == "0") {
         document.getElementById("edit_hei_status_selector").getElementsByTagName('option')[0].selected = 'selected';
@@ -922,6 +959,7 @@ firebase.analytics();
 
 
 const btn = document.querySelector('#add_new_profile_btn');
+const btnEdit = document.querySelector('#edit_profile_btn');
 
 btn.addEventListener('click', function(e) {
     e.preventDefault();
@@ -949,6 +987,42 @@ btn.addEventListener('click', function(e) {
         })
 })
 
+btnEdit.addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    if ($('#edit_image')[0].files.length === 0) {
+
+            console.log("No New Profile Image");
+            submitEditHEIRecord();
+
+    } else {
+        
+        const storage = firebase.storage();
+        const storageRef = storage.ref('hei_images/');
+
+        var file = document.querySelector('#edit_image').files[0];
+        var name = new Date() + '-' + file.name;
+
+        var metadata = {
+            contentType: file.type
+        }
+
+        var uploadTask = storageRef.child(name).put(file, metadata);
+
+        uploadTask.then(snapshot => snapshot.ref.getDownloadURL())
+            .then(url => {
+                console.log(url);
+                document.getElementById("top_bar_loader").style.display = "block";
+                document.querySelector('#display_edit').src = url;
+                document.querySelector('#edit_image').value = "";
+                Firebase_EDIT_HEI_image_link = url;
+                submitEditHEIRecord();
+        })
+
+    }   
+
+})
+
 document.getElementById("image").onchange = function(evt) {
 
     var tgt = evt.target || window.event.srcElement,
@@ -969,6 +1043,28 @@ document.getElementById("image").onchange = function(evt) {
         // fallback -- perhaps submit the input to an iframe and temporarily store
         // them on the server until the user's session ends.
     }
+}
+
+document.getElementById("edit_image").onchange = function(evt) {
+
+var tgt = evt.target || window.event.srcElement,
+    files = tgt.files;
+
+if (FileReader && files && files.length) {
+    var fr = new FileReader();
+    fr.onload = function() {
+        document.getElementById("display_edit").src = fr.result;
+        document.getElementById("display_edit").style.objectFit = "cover";
+        console.log(fr.result);
+    }
+    fr.readAsDataURL(files[0]);
+}
+
+// Not supported
+else {
+    // fallback -- perhaps submit the input to an iframe and temporarily store
+    // them on the server until the user's session ends.
+}
 }
 </script>
 

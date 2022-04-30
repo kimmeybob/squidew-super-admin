@@ -1,13 +1,15 @@
 <?php
 
-//$student_id = $_POST["student_id"];
+$student_id = $_POST["student_id"];
+$page = $_POST["page"];
 
 //Test Data
-$student_id = "18000019";
+//$student_id = "18000019";
+
+//default starting page is 1
+//$page = $_GET['page'];
 
 require '../../Database Settings/database_access_credentials.php';
-
-
 
 $query_fetch_student_transaction = "Select t.transaction_id, t.transaction_amount, t.transaction_date,
 t.transaction_status, t.transaction_status, t.transaction_type, 
@@ -21,10 +23,8 @@ left join bills_transaction as bt on t.transaction_id = bt.transaction_id order 
 $run_query_fetch_transaction = mysqli_query($connection, $query_fetch_student_transaction);
 
 //Details for Transactions
-
 while($initial_row = mysqli_fetch_array($run_query_fetch_transaction)){
     $transaction_type = $initial_row['transaction_type'];
-
 
     if($transaction_type == "0"){
         //Peer-To-Peer: SQUIDEW Peer-to-Peer Money Transfer Transaction
@@ -161,7 +161,71 @@ while($initial_row = mysqli_fetch_array($run_query_fetch_transaction)){
 
 }
 
-print(json_encode($OutputreturnObj));
+
+// define how many results you want per page
+$results_per_page = 10;
+
+$number_of_results = count((array)$OutputreturnObj);
+
+// determine number of total pages available
+$number_of_pages = ceil($number_of_results/$results_per_page);
+
+if($number_of_pages < 0){
+    $number_of_pages = 0;
+}
+
+// determine the sql LIMIT starting number for the results on the displaying page
+$this_page_first_result = ($page-1)*$results_per_page;
+
+//if last page
+if($this_page_first_result == $number_of_pages){
+    $last_starting_page = $this_page_first_result;
+
+    //If no Items/Empty Data sets
+    if($last_starting_page <= 0){
+        $last_starting_page = 0;
+    }
+    
+    for($i = $last_starting_page; $i < $number_of_results; $i++){
+        $PagedOutputreturnObj[$i] = clone $OutputreturnObj[$i];
+    }
+
+    //echo 'if-1';
+}else if($this_page_first_result > $number_of_results){
+    echo false;
+
+    //echo 'if-2';
+}else{
+    $i_ctr = 0;
+    for($i = $this_page_first_result; $i < $results_per_page+$this_page_first_result; $i++){
+        if($i < $number_of_results){
+            $PagedOutputreturnObj[$i_ctr] = clone $OutputreturnObj[$i];
+        }
+        $i_ctr++;
+    }
+
+    //echo 'if-3';
+}
+
+
+
+//echo "Items: ".count((array)$PagedOutputreturnObj);
+//echo "\nPages: ".$number_of_pages;
+
+
+
+
+if(empty($PagedOutputreturnObj)){
+    echo 'false';
+}else{
+    print(json_encode($PagedOutputreturnObj));
+}
+
+
+//echo "<br><br><br>";
+
+//echo count((array)$OutputreturnObj);
+//print(json_encode($OutputreturnObj));
 
 
 ?>

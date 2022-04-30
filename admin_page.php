@@ -40,7 +40,31 @@ require 'Database Settings/database_access_credentials.php';
 
     <title>SQUIDEW Admin Accounts Page</title>
 
+<style>
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+td,
+th {
+  text-align: left;
+  padding: 8px;
+}
+
+th {
+  position: sticky;
+  background-color: #0E203F;
+  z-index: 1;
+  top: -1;
+}
+</style>
 </head>
 
 <body style="background: white">
@@ -63,7 +87,7 @@ require 'Database Settings/database_access_credentials.php';
 
         <!-- HEI/Reports and Feedback/Admin Count -->
 
-        <div class="main_data_container" style="flex: 76%;;display: flex;flex-wrap: wrap;margin: 0 0 0 5%;">
+        <div class="main_data_container" style="flex: 76%;display: flex;flex-wrap: wrap;margin: 0 0 0 5%;">
 
             <div style="flex: 70%;margin: 5% 5% 5% 0%;">
 
@@ -81,9 +105,10 @@ require 'Database Settings/database_access_credentials.php';
                         </button>
                     </div>
                 </div>
-
                 <!-- Table -->
-                <table id="admin_table" class="admin_table" style="width:100%;">
+    
+            <div style="overflow:hidden; overflow-y: scroll;overflow-x: scroll;height: 75%;">
+                <table id="admin_table" class="admin_table" style="width:123%;">
                     <?php
                 
                 $query = "select admin.admin_id as admin_admin_id, admin.first_name as admin_first_name, admin.middle_name as admin_middle_name, admin.last_name as admin_last_name, admin.email as admin_email, admin.contact_number as admin_contact_number, admin.birthdate as admin_birthdate, admin.username as admin_username, admin.password as admin_password, admin.account_status as admin_account_status, admin.hei_id as admin_hei_id, admin.suffix as admin_suffix, admin.sex as admin_sex, admin.home_address as admin_home_address, admin.profile_image as admin_profile_image, hei.hei_name as hei_name from admin inner join hei on admin.hei_id = hei.hei_id;";
@@ -96,11 +121,9 @@ require 'Database Settings/database_access_credentials.php';
                 ?>
 
                     <tr style="background: #0E203F; color: white;text-align: center;font-size: 0.9rem">
-                        <th>Admin ID</th>
-                        <th>Name</th>
+                        <th style="width: 10%;">Admin ID</th>
+                        <th style="width: 15%;">Name</th>
                         <th>HEI</th>
-
-                        <!-- <th>DOB</th> -->
                         <th>Phone</th>
                         <th>Email</th>
                         <th>Status</th>
@@ -108,12 +131,17 @@ require 'Database Settings/database_access_credentials.php';
                     </tr>
 
                     <?php
+                    $admin_status_value = 0;//0 = Active | 1 = Deactivate
+
                     while($row = mysqli_fetch_array($run_query)){
                         $admin_status = "Active";
                         if($row['admin_account_status'] == 0){
                             $admin_status = "Offline";
+                            $admin_status_value == 1;
                         }else if($row['admin_account_status'] == 1){
                             $admin_status = "Active";
+                            $admin_status_value == 0;
+                            
                         }else{
                             $admin_status = "Terminated";
                         }
@@ -129,19 +157,36 @@ require 'Database Settings/database_access_credentials.php';
                         <td><?php echo $admin_status;?></td>
                         <td onclick="">
                             <div class="dropdown" style="margin: auto;">
-                                <button class="dropdown"
+                                <!-- <button class="dropdown"
                                     style="margin: auto;background: white;width: 25px;height: 25px;border-radius: 25px;border: 1px solid #A1A1A1;box-shadow: 0 0 1px rgba(0, 0, 0, 0.35)">
                                     ...
-                                </button>
+                                </button> -->
 
-                                <div class="dropdown-content">
+                                <div class="dropdown-content" id="dropdown-content">
                                     <a style="color: grey;font-size: 0.8rem;pointer-events: none;">Options</a>
                                     <a onclick="display_admin_details('<?php echo $row['admin_admin_id'];?>','<?php echo $row['hei_name'];?>','<?php echo $row['admin_first_name'];?>','<?php echo $row['admin_middle_name'];?>','<?php echo $row['admin_last_name'];?>','<?php echo $row['admin_contact_number']?>','<?php echo $row['admin_email'];?>','<?php echo $row['admin_birthdate'];?>','<?php echo $admin_status;?>','<?php echo $row['admin_username'];?>','<?php echo $row['admin_password'];?>','<?php echo $row['admin_suffix']?>','<?php echo $row['admin_home_address']?>','<?php echo $row['admin_sex']?>','<?php echo $row['admin_profile_image']?>');"
                                         style="color: #287BEE;cursor: default;">View</a>
                                     <a onclick="edit_admin_details('<?php echo $row['admin_admin_id'];?>','<?php echo $row['hei_name'];?>','<?php echo $row['admin_first_name'];?>','<?php echo $row['admin_middle_name'];?>','<?php echo $row['admin_last_name'];?>','<?php echo $row['admin_contact_number']?>','<?php echo $row['admin_email'];?>','<?php echo $row['admin_birthdate'];?>','<?php echo $admin_status;?>','<?php echo $row['admin_username'];?>','<?php echo $row['admin_password'];?>','<?php echo $row['admin_suffix']?>','<?php echo $row['admin_home_address']?>','<?php echo $row['admin_sex']?>','<?php echo $row['admin_profile_image']?>')"
                                         ; style="cursor: default;">Edit</a>
-                                    <a onclick="setDeleteIDValue(<?php echo $row['admin_admin_id'];?>)"
-                                        style="color: #EF575C;cursor: default;">Remove</a>
+
+                                    <?php
+                                    
+                                        if($row['admin_account_status'] == 1){
+                                            //Admin account is active
+                                            ?>
+
+                                                <a onclick="setDeleteIDValue(<?php echo $row['admin_admin_id'];?>)" style="color: #EF575C;cursor: default;">Terminate</a>
+                                            
+                                            <?php
+                                        }else{
+                                            ?>
+
+                                                <a onclick="setActivateIDValue(<?php echo $row['admin_admin_id'];?>)" style="color: #287BEE;cursor: default;">Activate</a>
+
+                                            <?php
+                                        }
+                                    
+                                    ?>
                                 </div>
                             </div>
                         </td>
@@ -150,6 +195,7 @@ require 'Database Settings/database_access_credentials.php';
                 }
                 ?>
                 </table>
+            </div>
                 <p style="display: none;padding: 0 0 0 1rem" id="table_empty_set_data_display"
                     class="table_empty_set_data_display">We coudn't find any results for your query.</p>
 
@@ -378,6 +424,7 @@ require 'Database Settings/database_access_credentials.php';
                     </div>
                 </div>
             </div>
+            <!-- END of Side Container -->
         </div>
         <!-- END of Main Content Container -->
 
@@ -447,9 +494,9 @@ require 'Database Settings/database_access_credentials.php';
 
                         <br>
                         <div style="">HEI</div>
-                        <select id="hei_type_selector" onchange="display_selection()"
+                        <select id="hei_type_selector2" onchange="display_selection()"
                             style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.1rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 5px">
-                            <option value="default" style="color:  #A1A1A1;">Select an HEI</option>
+                            <option value="default_value" style="color:  #A1A1A1;">Select an HEI</option>
                             <?php
                             
                             $query_get_hei = "select * from hei";
@@ -469,7 +516,7 @@ require 'Database Settings/database_access_credentials.php';
                             style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.2rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 10px;display: none;" />
                         <script>
                         function display_selection() {
-                            var select = document.getElementById('hei_type_selector');
+                            var select = document.getElementById('hei_type_selector2');
                             var selected_option_text = select.options[select.selectedIndex].value;
                             document.getElementById("associated_hei").value = selected_option_text;
                             console.log(selected_option_text);
@@ -532,7 +579,7 @@ require 'Database Settings/database_access_credentials.php';
                         <br>
                         <br>
                         <div style="">Email</div>
-                        <input type="text" class="add_email" id="add_email" minlength="3" maxlength="50"
+                        <input type="email" pattern="[^ @]*@[^ @]*" class="add_email" id="add_email" minlength="3" maxlength="50"
                             name="add_email" placeholder="e.g. carlkim@squidew.com"
                             style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.1rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 10px"
                             required />
@@ -544,7 +591,7 @@ require 'Database Settings/database_access_credentials.php';
                             style="border: none;margin: 10 0 10 0;width: 100%;font-size: 0.9rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 10px;display: flex;" />
                         <br>
                         <div style="">Contact Number</div>
-                        <input type="text" class="add_contact_number" id="add_contact_number" minlength="3"
+                        <input type="number" class="add_contact_number" id="add_contact_number" minlength="3"
                             maxlength="50" name="add_contact_number" placeholder="e.g. XXXXXXXXXXX"
                             style="border: none;margin: 10 0 10 0;width: 100%;font-size: 1.1rem;border: 1px solid #ADADAD;font-weight: normal;padding: 5px 0px 5px 10px"
                             required />
@@ -569,7 +616,6 @@ require 'Database Settings/database_access_credentials.php';
             </div>
         </div>
         <!----------------- END OF ADD ADMIN PROFILE ------->
-
 
 
         <!----------------- SIDE PANEL -- EDIT ADMIN PROFILE ------------------------------------------------>
@@ -1074,14 +1120,39 @@ function setDeleteIDValue(del_id) {
             console.log("Successfully Deleted a record.");
             // $(".body_container").load(window.location.href + " .body_container");
             $(" .admin_table").load(" .admin_table");
+        }
+
+    });
+}
+
+function setActivateIDValue(activate_id) {
+    activate_admin_id = activate_id;
+    console.log("Activate Admin ID: " + activate_admin_id);
+
+    $.ajax({
+        url: 'Functions/PHP/activate_admin.php',
+        type: 'post',
+        data: {
+            admin_id: activate_admin_id,
+        },
+        success: function(result) {
+            // $("#result_display").html(result);
+            console.log("Successfully Activate Admin Account Record.");
+            // $(".body_container").load(window.location.href + " .body_container");
+            $(" .admin_table").load(" .admin_table");
 
         }
     });
-
 }
+
 </script>
 
 <script>
+
+function isEmail(email) { 
+    return /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i.test(email);
+} 
+
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -1104,15 +1175,61 @@ const edit_btn = document.querySelector('#edit_new_profile_btn');
 btn.addEventListener('click', function(e) {
     console.log("Form: Create new Admin Form");
     e.preventDefault();
-
+    var emailcheck;
     const storage = firebase.storage();
     const storageRef = storage.ref('admin/');
 
-    if (document.getElementById("image").files.length == 0) {
+   
+    if(document.getElementById("add_admin_fname").value ==""){
+        alert("Error: First Name Field cannot be empty! Please try again...");    
+    }
+    else if(document.getElementById("add_admin_mname").value ==""){
+        alert("Error: Middle Name Field cannot be empty! Please try again...");    
+    }
+    else if(document.getElementById("add_admin_lname").value ==""){
+        alert("Error: Last Name Field cannot be empty! Please try again...");    
+    }
+    else if(document.getElementById("add_admin_location").value ==""){
+        alert("Error: Address Field cannot be empty! Please try again...");    
+    }
+    else if(document.getElementById("add_email").value ==""){
+        alert("Error: Email Field cannot be empty! Please try again...");    
+    }
+    else if(document.getElementById("add_contact_number").value ==""){
+        alert("Error: Contact Number Field cannot be empty! Please try again...");    
+    }
+    else if(document.getElementById("add_birthdate").value ==""){
+        alert("Error: Birthday Field cannot be empty! Please try again...");    
+    }
+    
+    
+    else if (document.getElementById("image").files.length == 0) {
         //Admin will use the profile default image.
-        submitAdminRecord();
-    } else {
+        if (isEmail(document.getElementById("add_email").value)){ 
+        var emailcheck=true;
+        
+        }
+        else {
+        var emailcheck = false;
+        alert("Please enter a valid email address!")
+        }
+        if(emailcheck == true){
+            submitAdminRecord();
+        
+        }
+      
+    } else{
         //Admin has a Profile Picture
+
+        if (isEmail(document.getElementById("add_email").value)){ 
+        var emailcheck=true;
+        
+        }
+        else {
+        var emailcheck = false;
+        alert("Please enter a valid email address!")
+        }
+        if(emailcheck == true){
         var file = document.querySelector('#image').files[0];
         var name = new Date() + '-' + file.name;
 
@@ -1129,11 +1246,17 @@ btn.addEventListener('click', function(e) {
                 document.querySelector('#display').src = url;
                 document.querySelector('#image').value = "";
                 Firebase_Admin_image_link = url;
-                submitAdminRecord();
+
+                    
+                    submitAdminRecord();
             })
     }
+}
+    
 
 })
+
+
 
 edit_btn.addEventListener('click', function(e) {
 
@@ -1159,14 +1282,58 @@ edit_btn.addEventListener('click', function(e) {
     }
 
 
-    // Upload New Image on Firebase
-    if (document.getElementById("edit_image").files.length === 0) {
+   
+    if(document.getElementById("edit_admin_fname").value ==""){
+        alert("Error: First Name Field cannot be empty! Please try again...");    
+    }
+    else if(document.getElementById("edit_admin_mname").value ==""){
+        alert("Error: Middle Name Field cannot be empty! Please try again...");    
+    }
+    else if(document.getElementById("edit_admin_lname").value ==""){
+        alert("Error: Last Name Field cannot be empty! Please try again...");    
+    }
+    else if(document.getElementById("edit_admin_location").value ==""){
+        alert("Error: Address Field cannot be empty! Please try again...");    
+    }
+    else if(document.getElementById("edit_email").value ==""){
+        alert("Error: Email Field cannot be empty! Please try again...");    
+    }
+    else if(document.getElementById("edit_contact_number").value ==""){
+        alert("Error: Contact Number Field cannot be empty! Please try again...");    
+    }
+    else if(document.getElementById("edit_birthdate").value ==""){
+        alert("Error: Birthday Field cannot be empty! Please try again...");    
+    }
+    
+    else if (document.getElementById("edit_image").files.length === 0) {
         console.log("No new images selected.");
         Firebase_Admin_image_link = Edit_Firebase_Admin_image_link;
-        submitAdminUpdateRecord();
+
+        if (isEmail(document.getElementById("edit_email").value)){ 
+        var emailcheck=true;
+        
+        }
+        else {
+        var emailcheck = false;
+        alert("Please enter a valid email address!")
+        }
+        if(emailcheck == true){
+            submitAdminUpdateRecord();
+        
+        }
+     
     } else {
         //Upload Function
-        var file = document.querySelector('#edit_image').files[0];
+        if (isEmail(document.getElementById("add_email").value)){ 
+        var emailcheck=true;
+        
+        }
+        else {
+        var emailcheck = false;
+        alert("Please enter a valid email address!")
+        }
+        if(emailcheck == true){
+        var file = document.querySelector('#image').files[0];
         var name = new Date() + '-' + file.name;
 
         var metadata = {
@@ -1185,6 +1352,7 @@ edit_btn.addEventListener('click', function(e) {
                 submitAdminUpdateRecord();
             })
     }
+}
 
 })
 

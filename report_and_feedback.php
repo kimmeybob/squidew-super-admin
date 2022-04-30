@@ -32,7 +32,21 @@ require 'Database Settings/database_access_credentials.php';
 
     <title>SQUIDEW Feedback and Reports Page</title>
 
+<style>
 
+td,th {
+    text-align: left;
+    padding: 8px;
+}
+
+th {
+    position: sticky;
+    background-color: #0E203F;
+    z-index: 1;
+    top: -1;
+}
+
+</style>
 </head>
 
 <body>
@@ -67,7 +81,8 @@ require 'Database Settings/database_access_credentials.php';
                 </div>
 
                 <!-- Table -->
-                <table id="report_table" class="report_table" style="width:100%;">
+            <div style="overflow:hidden; overflow-y: scroll;overflow-x: scroll;min-height: auto;max-height: 75%;">
+                <table id="report_table" class="report_table" style="width:122%">
                     <?php
                 $query = "select * from report_bug";
                 $run_query = mysqli_query($connection,$query);
@@ -80,12 +95,12 @@ require 'Database Settings/database_access_credentials.php';
                 ?>
 
                     <tr style="background: #0E203F; color: white;text-align: center;font-size: 0.9rem">
-                        <th>Report ID</th>
-                        <th>Date & Time</th>
+                        <th style="width: 8%;">Report ID</th>
+                        <th>Report Title</th>
+                        <th style="width: 13%;">Date & Time</th>
                         <th>Report Subject</th>
                         <th>Reporter's Email</th>
-                        <th>Status</th>
-
+                        <th style="width: 8%;">Status</th>
                         <th>Assignee</th>
                         <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
                     </tr>
@@ -117,8 +132,9 @@ require 'Database Settings/database_access_credentials.php';
                     <tr class="edit_data_row" id="edit_data_row" style="font-size: 0.9rem;"
                         onclick="display_feedback_details('<?php echo $row['report_id'];?>','<?php echo $row['super_admin_id'];?>','<?php echo $row['status'];?>','<?php echo $row['report_time'];?>','<?php echo $row['email'];?>','<?php echo $row['report_message'];?>','<?php echo $row['report_title'];?>');">
                         <td><?php echo $row['report_id'];?></td>
+                        <td><?php echo $row['report_title'];?></td>
                         <td><?php echo $row['report_time'];?></td>
-                        <th><?php echo $row['report_title'];?></th>
+                        <td><?php echo $row['report_title'];?></td>
                         <td><?php echo $row['email'];?></td>
                         <?php
                         
@@ -149,10 +165,10 @@ require 'Database Settings/database_access_credentials.php';
                          ?>
                         <td onclick="">
                             <div class="dropdown" style="margin: auto;">
-                                <button class="dropdown"
+                                <!-- <button class="dropdown"
                                     style="margin: auto;background: white;width: 25px;height: 25px;border-radius: 25px;border: 1px solid #A1A1A1;box-shadow: 0 0 1px rgba(0, 0, 0, 0.35)">
                                     ...
-                                </button>
+                                </button> -->
                                 <div class="dropdown-content">
                                     <a style="color: grey;font-size: 0.8rem;pointer-events: none;">Options</a>
                                     <!-- View  -->
@@ -172,6 +188,7 @@ require 'Database Settings/database_access_credentials.php';
                 }
                 ?>
                 </table>
+            </div>
                 <p style="display: none;padding: 0 0 0 1rem" id="table_empty_set_data_display"
                     class="table_empty_set_data_display">We coudn't find any results for your query.</p>
 
