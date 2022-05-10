@@ -5,6 +5,7 @@ $page = $_POST["page"];
 
 //Test Data
 //$student_id = "18000019";
+//$page = '1';
 
 //default starting page is 1
 //$page = $_GET['page'];
@@ -175,7 +176,17 @@ if($number_of_pages < 0){
 }
 
 // determine the sql LIMIT starting number for the results on the displaying page
+
+if($page == "last"){
+     $page = $number_of_pages;
+}else{
+  //Do nothing and retain sent page data.   
+}
+
 $this_page_first_result = ($page-1)*$results_per_page;
+
+
+
 
 //if last page
 if($this_page_first_result == $number_of_pages){

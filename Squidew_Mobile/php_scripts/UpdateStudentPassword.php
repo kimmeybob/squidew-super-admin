@@ -17,10 +17,9 @@ if($verified_status == "0"){
 
     $query_update_password_v = "update student set password = '".$new_password."', verified = '1' where student_id = '".$student_id."'";
     $run_query_update_password_no_verification_change = mysqli_query($connection, $query_update_password_v);
-    //echo 'success';
+    echo 'success';
 
     //Create OTP PIN 
-
     //echo 'Password Change with Verification Update';
 
 }else{

@@ -1,0 +1,24 @@
+html {
+    height: 100% ;
+    width: 100%;
+  
+  }
+  body {
+    background:#051634;
+    height: 100%;
+    width: 100%;
+  }
+  
+  
+  /* Active Tab */
+  #cashier_name {
+    pointer-events: none;
+    cursor: default;
+
+    color: #0e203f;
+    font-weight: bold;
+    
+  }
+
+  
+  

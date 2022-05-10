@@ -3,16 +3,15 @@
 
 $student_id = $_POST["student_id"];
 $description = $_POST["description"];
-$total_amount = $_POST["total_amount"];
+//$total_amount = $_POST["total_amount"];
 $fee_amount = $_POST["fee_amount"];
 
 
 //Test Data
 //$student_id = "18000021";
 //$description = "Billing";
-//$total_amount = "1.00";
+$total_amount = "1.00";
 //$fee_amount = "0";
-
 
 require '../../Database Settings/database_access_credentials.php';
 

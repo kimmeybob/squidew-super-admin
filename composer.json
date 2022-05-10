@@ -1,0 +1,13 @@
+{
+    "name": "carlsan/squidew",
+    "description": "SQUIDEW Central",
+    "authors": [
+        {
+            "name": "carlsan"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "guzzlehttp/guzzle": "7.4.x-dev"
+    }
+}

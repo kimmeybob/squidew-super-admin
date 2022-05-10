@@ -1,11 +1,11 @@
 <?php
 
 $student_id = $_POST["student_id"];
-//$total_amount = $_POST["total_amount"];
+$total_amount = $_POST["total_amount"];
 
 //Test Data
 //$student_id = "18000001";
-$total_amount = "1000.00";
+//$total_amount = "1000.00";
 
 require '../../Database Settings/database_access_credentials.php';
 

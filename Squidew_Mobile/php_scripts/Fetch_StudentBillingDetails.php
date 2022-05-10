@@ -8,7 +8,14 @@
 
 require '../../Database Settings/database_access_credentials.php';
     
-        $query = "select * from hei inner join student on student.hei_id = hei.hei_id inner join students_profile on students_profile.student_id = student.student_id inner join student_account_statement on student_account_statement.student_id = student.student_id where student.student_id = '".$student_id."'";
+        $query = "select * from hei 
+        inner join student on student.hei_id = hei.hei_id 
+        inner join department on department.hei_id = student.hei_id
+        inner join degree on degree.department_id = department.department_id
+        inner join students_profile on students_profile.student_id = student.student_id 
+        inner join student_account_statement on student_account_statement.student_id = student.student_id 
+        where student.student_id = '".$student_id."'";
+
         $run_query = mysqli_query($connection, $query);
         $query_response = mysqli_num_rows($run_query) > 0;
         //echo "Number of Rows: ".$query_response."<br>";

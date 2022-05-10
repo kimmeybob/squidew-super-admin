@@ -1,0 +1,83 @@
+html {
+  height: calc(100% - 5rem);
+  width: 100%;
+
+}
+body {
+  background: white;
+  height: calc(100% - 5rem);
+  width: 100%;
+}
+
+/* Active Tab */
+#cashout {
+pointer-events: none;
+cursor: default;
+background: #d3dff9;
+color: #0e203f;
+font-weight: bold;
+}
+
+
+table {
+  box-shadow: 5px 5px #cecece;
+  
+  
+}
+
+table,
+th,
+td {
+  border: 1px solid white;
+  border-collapse: collapse;
+  
+}
+tr:hover {
+  background: #013f96;
+  color: white;
+  transition: 0.3s;
+}
+
+th {
+  font-weight: normal;
+  padding: px;
+}
+
+
+tr{
+  background:rgb(204, 204, 204);
+  
+}
+tr:nth-child(odd) {
+  background: #cedbf7;
+}
+
+.dropdown-content {
+  display: flex;
+  position: relative;
+
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+
+
+/* .dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+ */
+@media screen and (max-width: 700px) {
+  /* .sidenav {
+    visibility: collapse;
+  } */
+  .body_container,
+  .sidenav {
+    /* flex-direction: column; */
+  }
+}

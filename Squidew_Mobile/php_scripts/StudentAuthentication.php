@@ -4,8 +4,8 @@ $user = $_POST["user"];
 $password = $_POST["password"];
 
 //Test Case
-// $user = "18000001";
-// $password = "usjrstudent_jamar";
+//$user = "18000001";
+//$password = "usjrstudent_jamar";
 
         
         // $server_name = "localhost";
@@ -40,7 +40,7 @@ $password = $_POST["password"];
                 }
                 
                 //echo 'true';
-                $query_fetch_user_data = "select * from student 
+                $query_fetch_user_data = "select *, students_profile.contact_number as contact_number, hei.contact_number as hei_contact_number from student 
                 inner join students_profile on students_profile.student_id = student.student_id 
                 inner join hei on hei.hei_id = student.hei_id 
                 inner join degree on degree.degree_id = student.degree_id 
